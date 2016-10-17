@@ -6,15 +6,14 @@
 
 /**
  *
- * @author Michael
+ * @author maxdubyk
  */
-public class app {
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        myJFrame mjf = new myJFrame();
+import java.awt.*;
+import javax.swing.*;
+public class Landing2 extends JPanel{
+    Landing2(){
+        super();
+        setBackground(Color.BLACK);
     }
     
 }
