@@ -15,7 +15,7 @@ public class myJPanel extends JPanel
 		setBackground(Color.gray);
 		setLayout(new GridLayout(1,2));
 		LandingPanel lp1 = new LandingPanel();
-  
+ 
                 add(lp1);
                 
 

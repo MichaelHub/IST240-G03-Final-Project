@@ -11,8 +11,11 @@
 import java.awt.*;
 import javax.swing.*;
 public class Landing2 extends JPanel{
-    Landing2(){
+    
+    Landing1 l1;
+    Landing2(Landing1 l1in){
         super();
+        l1 = l1in;
         setBackground(Color.BLACK);
     }
     

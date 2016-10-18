@@ -11,9 +11,15 @@
 import java.awt.*;
 import javax.swing.*;
 public class Landing1 extends JPanel{
+    
     JButton start,instructions,about;
-    Landing1(){
+    Landing2 l2;
+    
+    Landing1(Landing2 l2in){
         super();
+        
+        l2 = l2in;
+        
         start = new JButton();
         start.setText("Start Game");
         
