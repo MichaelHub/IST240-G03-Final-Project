@@ -12,11 +12,13 @@ import java.awt.*;
 import javax.swing.*;
 public class Landing2 extends JPanel{
     
-    Landing1 l1;
-    Landing2(Landing1 l1in){
+    JLabel next;
+    
+    Landing2(){
         super();
-        l1 = l1in;
-        setBackground(Color.BLACK);
+        setBackground(Color.CYAN);
+        next = new JLabel("");
+        add(next);
     }
     
 }
