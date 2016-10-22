@@ -11,7 +11,7 @@ public class myJFrame extends JFrame
 {
 	public myJFrame ()
 	{
-		super ("My First Frame");
+		super ("Clown Catcher");
 
   	 	myJPanel mjp = new myJPanel();
 
@@ -19,7 +19,7 @@ public class myJFrame extends JFrame
                 add(mjp,"Center");
                 
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setSize (800, 800);
+		setSize (700, 500);
 		setVisible(true);
 	}
 

@@ -38,6 +38,7 @@ public class LandingPanel extends JPanel implements ActionListener{
         Object obj = event.getSource();
         if (obj == L1.start)
             {
+                L2.removeBackground();
                 L2.next.setText("THIS WOULD START BE THE GAME");
             }
         else if (obj == L1.instructions)
