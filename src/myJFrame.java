@@ -17,13 +17,13 @@ public class myJFrame extends JFrame
     Landing1 L1 = new Landing1(L2, this);
     
     //Game panel
-    GamePanel G1 = new GamePanel();
+    GamePanel G1 = new GamePanel(this);
     
     //About Panel
-    AboutPanel A1 = new AboutPanel();
+    AboutPanel A1 = new AboutPanel(this);
     
     //Instructions Panel
-    InstructionsPanel I1 = new InstructionsPanel();
+    InstructionsPanel I1 = new InstructionsPanel(this);
     
 	public myJFrame ()
 	{
