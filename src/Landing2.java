@@ -18,25 +18,13 @@ public class Landing2 extends JPanel{
     public JLabel background;
     Landing2(){
         super();
-        setBackground(Color.GRAY);
-        next = new JLabel("");
-        add(next);
-        JButton button = new JButton();
         Icon img = new ImageIcon(getClass().getResource("background.gif"));
         
         background = new JLabel();
         background.setIcon( img );
         background.setLayout( new BorderLayout() );
         add( background );
-        JLabel title = new JLabel("Clown Catcher");
-        title.setHorizontalTextPosition(JLabel.CENTER);
-        title.setVerticalTextPosition(JLabel.CENTER);
-        background.add(title);
-    }
-    public void removeBackground() {
-        remove (background);
-        setBackground(Color.CYAN);
-        setBackground(Color.GRAY);
+    
     }
     
 }
