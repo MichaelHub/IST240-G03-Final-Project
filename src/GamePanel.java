@@ -23,7 +23,6 @@ public class GamePanel  extends JPanel implements ActionListener{
         Object obj = event.getSource();
         if (obj == this.back)
             {
-                System.out.println("tried");
                 jf.lpane.remove(jf.G1);
                 jf.lpane.add(jf.L1);
                 jf.lpane.add(jf.L2);
