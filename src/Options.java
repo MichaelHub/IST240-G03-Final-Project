@@ -4,10 +4,9 @@ import java.awt.event.*;
 
 public class Options extends JPanel implements ActionListener{
     
-    JButton characterSelect;
-    JComboBox timeSelect;
+    JComboBox timeSelect, difficultySelect, characterSelect;
     JLabel title;
-    JButton characterLabel, timeLabel;
+    JButton characterLabel, timeLabel, difficultyLabel, cont;
     myJFrame jf;
 
     
@@ -17,7 +16,8 @@ public class Options extends JPanel implements ActionListener{
         this.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
         
-        characterSelect = new JButton();
+        String[] characters = {"","Cat", "Hunter", "Skeleton"};
+        characterSelect = new JComboBox(characters);
         c.weightx = 0;
         c.gridx = 1;
         c.gridy = 3;
@@ -54,6 +54,34 @@ public class Options extends JPanel implements ActionListener{
         timeLabel.setEnabled(false);
         this.add(timeLabel, c);
         
+        String[] difficulties = {"","Easy", "Medium", "Hard", "Clown Hell"};
+        difficultySelect = new JComboBox(difficulties);
+        c.gridx = 1;
+        c.gridy = 5;
+        c.gridwidth = 0;
+        c.insets = new Insets(0,100,30,0);
+        this.add(difficultySelect, c);
+        this.difficultySelect.addActionListener(this);
+        
+        difficultyLabel = new JButton();
+        difficultyLabel.setText("Difficulty:");
+        c.gridx = 0;
+        c.gridy = 5;
+        c.gridwidth = 0;
+        c.insets = new Insets(0,-100,30,0);
+        difficultyLabel.setEnabled(false);
+        this.add(difficultyLabel, c);  
+        
+        cont = new JButton();
+        cont.setText("Continue");
+        c.gridx = 0;
+        c.gridy = 6;
+        c.gridwidth = 0;
+        c.insets = new Insets(0,-100,30,0);
+        cont.setEnabled(true);
+        this.add(cont, c);
+        this.cont.addActionListener(this);
+        
         title = new JLabel();
         title.setText("Options");
         title.setForeground(Color.WHITE);
@@ -68,5 +96,12 @@ public class Options extends JPanel implements ActionListener{
     }
     public void actionPerformed(ActionEvent event) {
         Object obj = event.getSource();
+        if (obj == cont)
+        {
+            
+                jf.lpane.remove(jf.L2);
+                jf.lpane.remove(jf.OP);
+                jf.lpane.add(jf.G1);
+        }
     }
 }
