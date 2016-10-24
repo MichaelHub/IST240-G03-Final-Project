@@ -5,16 +5,59 @@ import javax.swing.*;
 
 public class GamePanel  extends JPanel implements ActionListener{
     JButton back;
+    JButton menu;
+    JButton time;
+    JButton score;
     myJFrame jf;
     
     GamePanel (myJFrame jf) {
         this.jf = jf;
         
-        this.setLayout( new BorderLayout() );
+        this.setLayout( new GridBagLayout() );
+        GridBagConstraints c = new GridBagConstraints();
+        c.fill = GridBagConstraints.HORIZONTAL;
+        
+        this.setSize(700,500);
+        
         JLabel info = new JLabel ("Start of game");
-        this.add(info, BorderLayout.NORTH);
+        c.weightx = .5;
+        c.gridx = 0;
+        c.gridy = 0;
+        c.anchor = GridBagConstraints.PAGE_START;
+        this.add(info, c);
+        
+        time = new JButton ("Time: 0");
+        c.weightx = .5;
+        c.gridx = 0;
+        c.gridy = 5;
+        c.insets = new Insets (380,0,0,0);
+        c.anchor = GridBagConstraints.PAGE_END;
+        this.add(time, c);
+        time.setEnabled(false);
+        
+        score = new JButton ("Score: 0");
+        c.weightx = .5;
+        c.gridx = 1;
+        c.gridy = 5;
+        c.insets = new Insets (380,0,0,0);
+        c.anchor = GridBagConstraints.PAGE_END;
+        this.add(score, c);
+        score.setEnabled(false);
+        
+        menu = new JButton ("Menu");
+        c.weightx = .5;
+        c.gridx = 2;
+        c.gridy = 5;
+        c.insets = new Insets (400,0,0,0);
+        c.anchor = GridBagConstraints.PAGE_END;
+        this.add(menu, c);
         back = new JButton ("Back");
-        this.add(back, BorderLayout.CENTER);
+        c.weightx = .5;
+        c.gridx = 3;
+        c.gridy = 5;
+        c.insets = new Insets (380,0,0,0);
+        c.anchor = GridBagConstraints.PAGE_END;
+        this.add(back, c);
         this.back.addActionListener(this);
         
         this.setBackground(Color.GRAY);

@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 import java.awt.*;
 import javax.swing.*;
 
@@ -24,6 +18,9 @@ public class myJFrame extends JFrame
     
     //Instructions Panel
     InstructionsPanel I1 = new InstructionsPanel(this);
+    
+    //Options Panel
+    Options OP = new Options(this);
     
 	public myJFrame ()
 	{
@@ -61,10 +58,15 @@ public class myJFrame extends JFrame
                 I1.setOpaque(true);
                 
                 
+                //Options Panel (not visible at start)
+                OP.setBounds(0,0,700,500);
+                OP.setOpaque(false);
+                
                 lpane.add(L1, new Integer(1), 0);
                 lpane.add(L2, new Integer(0), 0);
                 frame.pack();
                 frame.setVisible(true);
+                frame.setResizable(false);
 
 
 	}
