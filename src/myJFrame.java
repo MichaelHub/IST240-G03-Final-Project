@@ -55,7 +55,7 @@ public class myJFrame extends JFrame
                 //Instructions Panel (not visible at start)
                 I1.setBounds(0,0,700,500);
                 I1.setBackground(Color.GRAY);
-                I1.setOpaque(true);
+                I1.setOpaque(false);
                 
                 
                 //Options Panel (not visible at start)

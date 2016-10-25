@@ -61,8 +61,8 @@ public class Landing1 extends JPanel implements ActionListener{
         else if (obj == this.instructions)
             {
                 jf.lpane.remove(jf.L1);
-                jf.lpane.remove(jf.L2);
-                jf.lpane.add(jf.I1);
+                //jf.lpane.remove(jf.L2);
+                jf.lpane.add(jf.I1, new Integer(1),0);
             }
         else if (obj == this.about)
             {

@@ -18,7 +18,7 @@ public class InstructionsPanel  extends JPanel implements ActionListener{
         this.add(back, BorderLayout.CENTER);
         this.back.addActionListener(this);
         
-        this.setBackground(Color.GRAY);
+        //this.setBackground(Color.GRAY);
     }
     public void actionPerformed(ActionEvent event) {
         Object obj = event.getSource();
@@ -26,7 +26,7 @@ public class InstructionsPanel  extends JPanel implements ActionListener{
             {
                 jf.lpane.remove(jf.I1);
                 jf.lpane.add(jf.L1);
-                jf.lpane.add(jf.L2);
+                //jf.lpane.add(jf.L2);
             }
     }
 }

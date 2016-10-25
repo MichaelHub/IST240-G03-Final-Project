@@ -99,9 +99,20 @@ public class Options extends JPanel implements ActionListener{
         if (obj == cont)
         {
             
+                
+                
+                jf.G1.chosen_character = String.valueOf(characterSelect.getSelectedItem());
+                jf.G1.chosen_difficulty = String.valueOf(difficultySelect.getSelectedItem());
+                jf.G1.chosen_time = String.valueOf(timeSelect.getSelectedItem());
+                
+                jf.G1.option1.setText("These buttons show options");
+                jf.G1.option2.setText(jf.G1.chosen_character);
+                jf.G1.option3.setText(jf.G1.chosen_difficulty);
+                jf.G1.option4.setText(jf.G1.chosen_time);
+                
                 jf.lpane.remove(jf.L2);
                 jf.lpane.remove(jf.OP);
                 jf.lpane.add(jf.G1);
-        }
+            }
     }
 }

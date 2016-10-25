@@ -8,10 +8,14 @@ public class GamePanel  extends JPanel implements ActionListener{
     JButton menu;
     JButton time;
     JButton score;
+    JButton option1, option2, option3, option4;
     myJFrame jf;
+    
+    String chosen_character, chosen_time, chosen_difficulty;
     
     GamePanel (myJFrame jf) {
         this.jf = jf;
+       
         
         this.setLayout( new GridBagLayout() );
         GridBagConstraints c = new GridBagConstraints();
@@ -61,6 +65,16 @@ public class GamePanel  extends JPanel implements ActionListener{
         this.back.addActionListener(this);
         
         this.setBackground(Color.GRAY);
+        option1 = new JButton(chosen_time);
+        add(option1);        
+        option2 = new JButton(chosen_time);
+        add(option2);      
+        option3 = new JButton(chosen_time);
+        add(option3);
+        option4 = new JButton(chosen_time);
+        add(option4);
+
+        
     }
     public void actionPerformed(ActionEvent event) {
         Object obj = event.getSource();
