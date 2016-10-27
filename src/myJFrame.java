@@ -31,8 +31,6 @@ public class myJFrame extends JFrame
                 frame.setPreferredSize(new Dimension(700,500));
                 frame.setLayout(new BorderLayout());
                 frame.add(lpane, BorderLayout.CENTER);
-                //Pane on which all panels will be placed
-                lpane.setBounds(0,0,700,500);
                 
                 //Home title and buttons
                 L1.setBounds(100,50,500,400);
@@ -43,7 +41,7 @@ public class myJFrame extends JFrame
                 L2.setOpaque(true);
                 
                 //Game Panel (not visible at start)
-                G1.setBounds(0,0,700,500);
+                G1.setBounds(0,-28,700,500);
                 G1.setBackground(Color.GRAY);
                 G1.setOpaque(true);
                 
