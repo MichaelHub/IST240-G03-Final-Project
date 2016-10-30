@@ -133,6 +133,8 @@ public class Options extends JPanel implements ActionListener, ItemListener{
                         case 2: jf.G1.character.setIcon(skeleton); break;
                     }
                 
+                jf.G1.timeNumber = 0;
+                
                 jf.lpane.remove(jf.L2);
                 jf.lpane.remove(jf.OP);
                 jf.lpane.add(jf.G1);
