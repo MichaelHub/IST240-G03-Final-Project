@@ -49,7 +49,7 @@ public class Options extends JPanel implements ActionListener, ItemListener{
         this.add(characterLabel, c);
         
         //Time select
-        String[] times = {"Day", "Night"};
+        String[] times = {"Day", "Night", "Twilight"};
         timeSelect = new JComboBox(times);
         c.gridx = 1;
         c.gridy = 4;
