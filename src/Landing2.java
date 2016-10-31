@@ -18,7 +18,7 @@ public class Landing2 extends JPanel{
     public JLabel background;
     Landing2(){
         super();
-        Icon img = new ImageIcon(getClass().getResource("background.gif"));
+        Icon img = new ImageIcon("images/background.gif");
         
         background = new JLabel();
         background.setIcon( img );
