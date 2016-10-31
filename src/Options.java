@@ -138,6 +138,7 @@ public class Options extends JPanel implements ActionListener, ItemListener{
                 jf.lpane.remove(jf.L2);
                 jf.lpane.remove(jf.OP);
                 jf.lpane.add(jf.G1);
+                jf.G1.grabFocus();
         }
     }
     public void itemStateChanged(ItemEvent event) {
