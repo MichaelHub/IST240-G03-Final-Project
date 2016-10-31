@@ -4,10 +4,10 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.*;
 
-public class GamePanel  extends JPanel implements ActionListener{
+public class GamePanel  extends JPanel implements ActionListener, KeyListener{
     JButton back, menu, timeDisplay, scoreDisplay, menuClose, menuMain, menuOptions;
     JButton option1, option2, option3;
-    JLabel character;
+    JLabel character, background;
     myJFrame jf;
     JPanel gameMenu;
     Timer time;
@@ -17,12 +17,17 @@ public class GamePanel  extends JPanel implements ActionListener{
     
     GamePanel (myJFrame jf) {
         this.jf = jf;
+        
+        this.setFocusable(true);
+        this.addKeyListener(this);
+        this.grabFocus();
        
         this.setLayout(new BorderLayout());
         
         //Screen for game elements
         JPanel gameScreen = new JPanel();
         gameScreen.setLayout(null);
+       
         
         //Menu within gameScreen
         gameMenu = new JPanel();
@@ -76,6 +81,10 @@ public class GamePanel  extends JPanel implements ActionListener{
         gameMenu.setVisible(false);   
         
         //end of gameMenu
+        //set game background
+        Icon img = new ImageIcon("images/map1.png");
+        background = new JLabel();
+        background.setIcon( img );
         
         option1 = new JButton("1");
         gameScreen.add(option1);       
@@ -128,6 +137,9 @@ public class GamePanel  extends JPanel implements ActionListener{
         
         this.add(bottomBar, BorderLayout.SOUTH);
         this.add(gameScreen, BorderLayout.CENTER);
+        
+        gameScreen.add(background);
+        background.setBounds(-150,-150,1400,1000);
                 
     }
     public void actionPerformed(ActionEvent event) {
@@ -156,5 +168,16 @@ public class GamePanel  extends JPanel implements ActionListener{
             timeDisplay.setText("Time: " + timeNumber);
         }
         
+    }
+    @Override
+    public void keyPressed(KeyEvent ke) {
+        System.out.println(ke.getKeyCode());
+    }
+    @Override
+    public void keyReleased(KeyEvent ke) {
+        //doSomething(); - this may create confusion.
+    }
+    @Override
+    public void keyTyped(KeyEvent ke) {
     }
 }
