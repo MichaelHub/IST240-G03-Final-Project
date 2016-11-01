@@ -12,6 +12,8 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
     JPanel gameMenu;
     Timer time;
     int timeNumber;
+    int x,y;//Cooridinates for character
+    Character lastkey = null;//Remember last key to clear input
     
     String chosen_character, chosen_time, chosen_difficulty;
     
@@ -97,7 +99,9 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
         option3.setBounds(200, 100, 80, 50);
         gameScreen.add(option3);
         character = new JLabel();
-        character.setBounds(300, 100, 60, 60);
+        x = 0;
+        y = 30;
+        character.setBounds(x, y, 60, 60);
         gameScreen.add(character);
         
         
@@ -171,11 +175,27 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
     }
     @Override
     public void keyPressed(KeyEvent ke) {
-        System.out.println(ke.getKeyCode());
+        int k = ke.getKeyCode();
+        
+        if(k == ke.VK_RIGHT){
+            x = x+10;
+            if (x>650){x=x-10;}
+            character.setBounds(x, y, 60, 60);}
+        if(k == ke.VK_LEFT){
+            x = x-10;
+            if (x<0){x=x+10;}
+            character.setBounds(x, y, 60, 60);}
+        if(k == ke.VK_UP){
+            y = y-10;
+            if (y<30){y=y+10;}
+            character.setBounds(x, y, 60, 60);}
+        if(k == ke.VK_DOWN){
+            y = y+10;
+            if (y>400){y=y-10;}
+            character.setBounds(x, y, 60, 60);}
     }
     @Override
     public void keyReleased(KeyEvent ke) {
-        //doSomething(); - this may create confusion.
     }
     @Override
     public void keyTyped(KeyEvent ke) {
