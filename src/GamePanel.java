@@ -7,12 +7,13 @@ import javax.swing.border.*;
 public class GamePanel  extends JPanel implements ActionListener, KeyListener{
     JButton back, menu, timeDisplay, scoreDisplay, menuClose, menuMain, menuOptions;
     JButton option1, option2, option3;
-    JLabel character, background;
+    JLabel character, clown, background;
     myJFrame jf;
     JPanel gameMenu;
     Timer time;
     int timeNumber;
     int x,y;//Cooridinates for character
+    int clownx, clowny;//coordinates for clown
     Character lastkey = null;//Remember last key to clear input
     
     String chosen_character, chosen_time, chosen_difficulty;
@@ -105,6 +106,15 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
         gameScreen.add(character);
         
         
+        clown = new JLabel();
+        clownx = 30;
+        clowny = 50;
+        clown.setBounds(x,y,60,60);
+        Icon clown_icon = new ImageIcon("images/clown_icon.png");
+        clown.setIcon(clown_icon);
+        gameScreen.add(clown);
+        
+       
         
         //Bottom bar for timer and menu
         JPanel bottomBar = new JPanel();
