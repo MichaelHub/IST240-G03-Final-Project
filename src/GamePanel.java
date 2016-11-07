@@ -4,25 +4,32 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.*;
 
-public class GamePanel  extends JPanel implements ActionListener{
+public class GamePanel  extends JPanel implements ActionListener, KeyListener{
     JButton back, menu, timeDisplay, scoreDisplay, menuClose, menuMain, menuOptions;
     JButton option1, option2, option3;
-    JLabel character;
+    JLabel character, background;
     myJFrame jf;
     JPanel gameMenu;
     Timer time;
     int timeNumber;
+    int x,y;//Cooridinates for character
+    Character lastkey = null;//Remember last key to clear input
     
     String chosen_character, chosen_time, chosen_difficulty;
     
     GamePanel (myJFrame jf) {
         this.jf = jf;
+        
+        this.setFocusable(true);
+        this.addKeyListener(this);
+        this.grabFocus();
        
         this.setLayout(new BorderLayout());
         
         //Screen for game elements
         JPanel gameScreen = new JPanel();
         gameScreen.setLayout(null);
+       
         
         //Menu within gameScreen
         gameMenu = new JPanel();
@@ -76,6 +83,10 @@ public class GamePanel  extends JPanel implements ActionListener{
         gameMenu.setVisible(false);   
         
         //end of gameMenu
+        //set game background
+        Icon img = new ImageIcon("images/map1.png");
+        background = new JLabel();
+        background.setIcon( img );
         
         option1 = new JButton("1");
         gameScreen.add(option1);       
@@ -88,7 +99,9 @@ public class GamePanel  extends JPanel implements ActionListener{
         option3.setBounds(200, 100, 80, 50);
         gameScreen.add(option3);
         character = new JLabel();
-        character.setBounds(300, 100, 60, 60);
+        x = 0;
+        y = 30;
+        character.setBounds(x, y, 60, 60);
         gameScreen.add(character);
         
         
@@ -128,6 +141,9 @@ public class GamePanel  extends JPanel implements ActionListener{
         
         this.add(bottomBar, BorderLayout.SOUTH);
         this.add(gameScreen, BorderLayout.CENTER);
+        
+        gameScreen.add(background);
+        background.setBounds(-150,-150,1400,1000);
                 
     }
     public void actionPerformed(ActionEvent event) {
@@ -156,5 +172,32 @@ public class GamePanel  extends JPanel implements ActionListener{
             timeDisplay.setText("Time: " + timeNumber);
         }
         
+    }
+    @Override
+    public void keyPressed(KeyEvent ke) {
+        int k = ke.getKeyCode();
+        
+        if(k == ke.VK_RIGHT){
+            x = x+10;
+            if (x>650){x=x-10;}
+            character.setBounds(x, y, 60, 60);}
+        if(k == ke.VK_LEFT){
+            x = x-10;
+            if (x<0){x=x+10;}
+            character.setBounds(x, y, 60, 60);}
+        if(k == ke.VK_UP){
+            y = y-10;
+            if (y<30){y=y+10;}
+            character.setBounds(x, y, 60, 60);}
+        if(k == ke.VK_DOWN){
+            y = y+10;
+            if (y>400){y=y-10;}
+            character.setBounds(x, y, 60, 60);}
+    }
+    @Override
+    public void keyReleased(KeyEvent ke) {
+    }
+    @Override
+    public void keyTyped(KeyEvent ke) {
     }
 }
