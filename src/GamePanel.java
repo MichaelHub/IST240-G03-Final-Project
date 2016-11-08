@@ -13,7 +13,9 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
     Timer time;
     int timeNumber;
     int x,y;//Cooridinates for character
+    int bx,by,bw,bh; //Bounds for background
     Character lastkey = null;//Remember last key to clear input
+    int[] keyLog;
     
     String chosen_character, chosen_time, chosen_difficulty;
     
@@ -30,6 +32,12 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
         JPanel gameScreen = new JPanel();
         gameScreen.setLayout(null);
        
+        //Set keys as not pressed
+        keyLog = new int[4];
+        keyLog[0] = 0;
+        keyLog[1] = 0;
+        keyLog[2] = 0;
+        keyLog[3] = 0;
         
         //Menu within gameScreen
         gameMenu = new JPanel();
@@ -143,7 +151,11 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
         this.add(gameScreen, BorderLayout.CENTER);
         
         gameScreen.add(background);
-        background.setBounds(-150,-150,1400,1000);
+        bx = -150;
+        by = -150;
+        bw = 1400;
+        bh = 1000;
+        background.setBounds(bx,by, bw, bh);
                 
     }
     public void actionPerformed(ActionEvent event) {
@@ -173,29 +185,209 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
         }
         
     }
+    
+    public void getCharacterLocation() {
+        double cx = character.getBounds().getX();
+        double cy = character.getBounds().getY();
+        double cw = character.getBounds().getWidth();
+        double ch = character.getBounds().getHeight();
+        System.out.println("Character X: "+cx);
+        System.out.println("Character Y: "+cy);
+        System.out.println("Character W: "+cw);
+        System.out.println("Character H: "+ch);
+        System.out.println("Background X: "+bx);
+        System.out.println("Background Y: "+by);
+        System.out.println("Background W: "+bw);
+        System.out.println("Background H: "+bh);
+        System.out.println("---------------");
+    }
+    
+    public boolean intersect (JLabel one, JButton two) {
+        double ox = one.getBounds().getX();
+        double oy = one.getBounds().getY();
+        double ow = one.getBounds().getWidth();
+        double oh = one.getBounds().getHeight();
+        ox = ox-(ow/2);
+        double tx = two.getBounds().getX();
+        double ty = two.getBounds().getY();
+        double tw = two.getBounds().getWidth();
+        double th = two.getBounds().getHeight();
+        tx = tx-(tw/2);
+        double oLeftSide = ox;
+        double oRightSide = ox + ow;
+        double tLeftSide = tx;
+        double tRightSide = tx + tw;
+        double oBottomSide = oy + oh;
+        double oTopSide = oy;
+        double tBottomSide = ty + th;
+        double tTopSide = ty;
+        if (oLeftSide < tRightSide && oLeftSide > tLeftSide || oLeftSide < tRightSide && oLeftSide > tLeftSide) {
+            System.out.println("Intersecting on X");
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
     @Override
     public void keyPressed(KeyEvent ke) {
         int k = ke.getKeyCode();
         
+        //Movement right (and top-right and down-right)
         if(k == ke.VK_RIGHT){
-            x = x+10;
-            if (x>650){x=x-10;}
-            character.setBounds(x, y, 60, 60);}
+            keyLog[0] = 1;
+            getCharacterLocation();
+            intersect(character, option2);
+            if (character.getBounds().getX() > 570.0 && bx > -240.01) {
+                bx = bx - 10;
+                background.setBounds(bx, by, bw, bh);
+            } else if (keyLog[2] == 1) {
+                x = x+10;
+                if (x>650){
+                    x = x-10;
+                }
+                y = y-10;
+                if (y<30){
+                    y=y+10;
+                }
+                character.setBounds(x, y, 60, 60);
+            } else if (keyLog[3] == 1) {
+                x = x+10;
+                if (x>650){
+                    x = x-10;
+                }
+                y = y+10;
+                if (y<30){
+                    y=y-10;
+                }
+                character.setBounds(x, y, 60, 60);
+            } else {
+                x = x+10;
+                if (x>650){
+                    x = x-10;
+                }
+                character.setBounds(x, y, 60, 60);
+            }
+        }
+        //Movement left (and down-left and down-right)
         if(k == ke.VK_LEFT){
-            x = x-10;
-            if (x<0){x=x+10;}
-            character.setBounds(x, y, 60, 60);}
+            keyLog[1] = 1;
+            getCharacterLocation();
+            if (character.getBounds().getX() < 60.0 && bx < 0) {
+                bx = bx + 10;
+                background.setBounds(bx, by, bw, bh);
+            } else if (keyLog[2] == 1) {
+                x = x-10;
+                if (x<0){
+                    x=x+10;
+                }
+                y = y-10;
+                if (y<30){
+                    y=y+10;
+                }
+                character.setBounds(x, y, 60, 60);
+            } else if (keyLog[3] == 1) {
+                x = x-10;
+                if (x<0){
+                    x=x+10;
+                }
+                y = y+10;
+                if (y<30){
+                    y=y-10;
+                }
+                character.setBounds(x, y, 60, 60);
+            } else {
+                x = x-10;
+                if (x<0){
+                    x=x+10;
+                }
+                character.setBounds(x, y, 60, 60);
+            }
+        }
         if(k == ke.VK_UP){
-            y = y-10;
-            if (y<30){y=y+10;}
-            character.setBounds(x, y, 60, 60);}
+            keyLog[2] = 1;
+            getCharacterLocation();
+            if (character.getBounds().getY() < 60.0 && by < -140) {
+                by = by + 10;
+                background.setBounds(bx, by, bw, bh);
+            } else if (keyLog[0] == 0 && keyLog[1] == 0) {
+                y = y-10;
+                if (y<30){
+                    y=y+10;
+                }
+                character.setBounds(x, y, 60, 60);
+            } else if (keyLog[0] == 1) {
+                x = x+10;
+                if (x>650){
+                    x = x-10;
+                }
+                y = y-10;
+                if (y<30){
+                    y=y+10;
+                }
+                character.setBounds(x, y, 60, 60);
+            } else if (keyLog[1] == 1) {
+                x = x-10;
+                if (x<0){
+                    x=x+10;
+                }
+                y = y-10;
+                if (y<30){
+                    y=y+10;
+                }
+                character.setBounds(x, y, 60, 60);
+            }
+        }
         if(k == ke.VK_DOWN){
-            y = y+10;
-            if (y>400){y=y-10;}
-            character.setBounds(x, y, 60, 60);}
+            keyLog[3] = 1;
+            if (character.getBounds().getY() > 380.0 && by > -360) {
+                by = by - 10;
+                background.setBounds(bx, by, bw, bh);
+            } else if (keyLog[0] == 0 && keyLog[1] == 0) {
+                y = y+10;
+                if (y>400){
+                    y=y-10;
+                }
+                character.setBounds(x, y, 60, 60);
+            } else if (keyLog[0] == 1) {
+                x = x+10;
+                if (x>650){
+                    x = x-10;
+                }
+                y = y+10;
+                if (y>400){
+                    y=y-10;
+                }
+                character.setBounds(x, y, 60, 60);
+            } else if (keyLog[1] == 1) {
+                x = x-10;
+                if (x<0){
+                    x=x+10;
+                }
+                y = y+10;
+                if (y>400){
+                    y=y-10;
+                }
+                character.setBounds(x, y, 60, 60);
+            }            
+        }
     }
     @Override
     public void keyReleased(KeyEvent ke) {
+        int k = ke.getKeyCode();
+        
+        if(k == ke.VK_RIGHT){
+            keyLog[0] = 0;
+        }
+        if(k == ke.VK_LEFT){
+            keyLog[1] = 0;
+        }
+        if(k == ke.VK_UP){
+            keyLog[2] = 0;
+        }
+        if(k == ke.VK_DOWN){
+            keyLog[3] = 0;
+        }
     }
     @Override
     public void keyTyped(KeyEvent ke) {
