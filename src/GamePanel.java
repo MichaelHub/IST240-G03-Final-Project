@@ -202,31 +202,11 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
         System.out.println("---------------");
     }
     
-    public boolean intersect (JLabel one, JButton two) {
-        double ox = one.getBounds().getX();
-        double oy = one.getBounds().getY();
-        double ow = one.getBounds().getWidth();
-        double oh = one.getBounds().getHeight();
-        ox = ox-(ow/2);
-        double tx = two.getBounds().getX();
-        double ty = two.getBounds().getY();
-        double tw = two.getBounds().getWidth();
-        double th = two.getBounds().getHeight();
-        tx = tx-(tw/2);
-        double oLeftSide = ox;
-        double oRightSide = ox + ow;
-        double tLeftSide = tx;
-        double tRightSide = tx + tw;
-        double oBottomSide = oy + oh;
-        double oTopSide = oy;
-        double tBottomSide = ty + th;
-        double tTopSide = ty;
-        if (oLeftSide < tRightSide && oLeftSide > tLeftSide || oLeftSide < tRightSide && oLeftSide > tLeftSide) {
-            System.out.println("Intersecting on X");
-            return true;
-        } else {
-            return false;
-        }
+    public boolean intersect (JLabel one, JLabel two) {
+        Rectangle rectB = two.getBounds();
+        Rectangle result = SwingUtilities.computeIntersection(one.getX(), one.getY(), one.getWidth(), one.getHeight(), rectB);
+
+        return (result.getWidth() > 0 && result.getHeight() > 0);
     }
     
     @Override
@@ -237,7 +217,7 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
         if(k == ke.VK_RIGHT){
             keyLog[0] = 1;
             getCharacterLocation();
-            intersect(character, option2);
+            //intersect(character, );
             if (character.getBounds().getX() > 570.0 && bx > -240.01) {
                 bx = bx - 10;
                 background.setBounds(bx, by, bw, bh);
