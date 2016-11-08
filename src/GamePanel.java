@@ -7,15 +7,20 @@ import javax.swing.border.*;
 public class GamePanel  extends JPanel implements ActionListener, KeyListener{
     JButton back, menu, timeDisplay, scoreDisplay, menuClose, menuMain, menuOptions;
     JButton option1, option2, option3;
-    JLabel character, background;
+    JLabel character, clown, background;
     myJFrame jf;
     JPanel gameMenu;
-    Timer time;
+    Timer time, clown_time;
     int timeNumber;
     int x,y;//Cooridinates for character
+    int clownx, clowny;//coordinates for clown
+    Icon clown_icon;
     Character lastkey = null;//Remember last key to clear input
+    int score_count;
+
     
-    String chosen_character, chosen_time, chosen_difficulty;
+    String chosen_character, chosen_time;
+    int chosen_difficulty;
     
     GamePanel (myJFrame jf) {
         this.jf = jf;
@@ -101,10 +106,21 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
         character = new JLabel();
         x = 0;
         y = 30;
-        character.setBounds(x, y, 60, 60);
+        character.setBounds(x, y, 40, 40);
         gameScreen.add(character);
         
+                
         
+        clown = new JLabel();
+        clownx = 100;
+        clowny = 100;
+        clown.setBounds(x,y,60,60);
+        clown_icon = new ImageIcon("images/clown_icon.png");
+        clown.setIcon(clown_icon);
+        gameScreen.add(clown);
+        
+        clown_time = new Timer(1000, this);
+       
         
         //Bottom bar for timer and menu
         JPanel bottomBar = new JPanel();
@@ -123,7 +139,8 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
         time = new Timer(1000, this);
         time.start();
         
-        scoreDisplay = new JButton ("Score: 0");
+        score_count = 0;
+        scoreDisplay = new JButton ("Score: "+score_count);
         c.weightx = .5;
         c.gridx = 1;
         c.gridy = 5;
@@ -144,8 +161,27 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
         
         gameScreen.add(background);
         background.setBounds(-150,-150,1400,1000);
+        
+        
                 
     }
+    
+    
+    
+    public void intersection(JLabel characterinput, JLabel clowninput){
+        
+        
+        if (Math.abs((characterinput.getX()-clowninput.getX())) < 5 && Math.abs((characterinput.getY()-clowninput.getY())) < 5){
+            score_count++;
+            scoreDisplay.setText("Score: "+score_count);
+            clownx = (int) (Math.random()*(650)+20);
+            clowny = (int) (Math.random()*(400));
+            clown.setBounds(new Rectangle(clownx,clowny,60,60));  
+        }
+       
+    }
+    
+    
     public void actionPerformed(ActionEvent event) {
         Object obj = event.getSource();
         if (obj == menuMain)
@@ -171,6 +207,11 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
             timeNumber++;
             timeDisplay.setText("Time: " + timeNumber);
         }
+        if (obj == clown_time){
+            clownx = (int) (Math.random()*(650)+20);
+            clowny = (int) (Math.random()*(400));
+            clown.setBounds(new Rectangle(clownx,clowny,60,60));
+        }
         
     }
     @Override
@@ -180,19 +221,24 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
         if(k == ke.VK_RIGHT){
             x = x+10;
             if (x>650){x=x-10;}
-            character.setBounds(x, y, 60, 60);}
+            character.setBounds(x, y, 60, 60);
+            }
+            intersection(character,clown);
         if(k == ke.VK_LEFT){
             x = x-10;
             if (x<0){x=x+10;}
             character.setBounds(x, y, 60, 60);}
+            intersection(character,clown);
         if(k == ke.VK_UP){
             y = y-10;
             if (y<30){y=y+10;}
             character.setBounds(x, y, 60, 60);}
+            intersection(character,clown);
         if(k == ke.VK_DOWN){
             y = y+10;
             if (y>400){y=y-10;}
             character.setBounds(x, y, 60, 60);}
+            intersection(character,clown);
     }
     @Override
     public void keyReleased(KeyEvent ke) {

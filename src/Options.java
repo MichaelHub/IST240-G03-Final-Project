@@ -116,11 +116,24 @@ public class Options extends JPanel implements ActionListener, ItemListener{
         {
                 //Set button text on GamePanel for Assignment 2
                 jf.G1.chosen_character = String.valueOf(characterSelect.getSelectedItem());
-                jf.G1.chosen_difficulty = String.valueOf(difficultySelect.getSelectedItem());
+                
+                if (String.valueOf(difficultySelect.getSelectedItem()) == "Easy"){
+                    jf.G1.chosen_difficulty = 15000;
+                }
+                if (String.valueOf(difficultySelect.getSelectedItem()) == "Medium"){
+                    jf.G1.chosen_difficulty = 12000;
+                }
+                if (String.valueOf(difficultySelect.getSelectedItem()) == "Hard"){
+                    jf.G1.chosen_difficulty = 9000;
+                }
+                if (String.valueOf(difficultySelect.getSelectedItem()) == "Clown Hell"){
+                    jf.G1.chosen_difficulty = 7000;
+                }
+
+                
                 jf.G1.chosen_time = String.valueOf(timeSelect.getSelectedItem());
                 
                 jf.G1.option1.setText(jf.G1.chosen_character);
-                jf.G1.option2.setText(jf.G1.chosen_difficulty);
                 jf.G1.option3.setText(jf.G1.chosen_time);
                 
                 Icon hunter = new ImageIcon("images/hunter.gif");
@@ -139,6 +152,12 @@ public class Options extends JPanel implements ActionListener, ItemListener{
                 jf.lpane.remove(jf.OP);
                 jf.lpane.add(jf.G1);
                 jf.G1.grabFocus();
+                
+                
+                //jf.G1.clown_time.setDelay(jf.G1.chosen_difficulty);
+                jf.G1.clown_time.setDelay(60000);
+                jf.G1.clown_time.start();
+                
         }
     }
     public void itemStateChanged(ItemEvent event) {
