@@ -120,19 +120,18 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
         x = 0;
         y = 30;
         character.setBounds(x, y, 40, 40);
-        gameScreen.add(character);
+        //gameScreen.add(character);
         
                 
         
         clown = new JLabel();
         clownx = 100;
         clowny = 100;
-        clown.setBounds(x,y,60,60);
-        clown_icon = new ImageIcon("images/clown_icon.png");
+        clown.setBounds(x,y,40,60);
+        clown_icon = new ImageIcon("images/clown_left.gif");
         clown.setIcon(clown_icon);
-        gameScreen.add(clown);
         
-        clown_time = new Timer(1000, this);
+        clown_time = new Timer(300, this);
        
         
         //Bottom bar for timer and menu
@@ -178,11 +177,13 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
         bw = 1400;
         bh = 1000;
         background.setBounds(bx,by, bw, bh);
+        background.add(clown);
+        background.add(character);
     }
       
     public void getCharacterLocation() {
-        double cx = character.getBounds().getX();
-        double cy = character.getBounds().getY();
+        double cx = character.getLocationOnScreen().getX();
+        double cy = character.getLocationOnScreen().getY();
         double cw = character.getBounds().getWidth();
         double ch = character.getBounds().getHeight();
         System.out.println("Character X: " + cx);
@@ -224,32 +225,52 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
             timeNumber++;
             timeDisplay.setText("Time: " + timeNumber);
         }
+        /*
         if (obj == clown_time){
-            clownx = (int) (Math.random()*(650)+20);
-            clowny = (int) (Math.random()*(400));
-            clown.setBounds(new Rectangle(clownx,clowny,60,60));
+            int randx = (int) (Math.floor(Math.random() * 3));
+            int randy = (int) (Math.floor(Math.random() * 3));
+                
+            switch (randx) {
+                case 0: clownx = clownx + 10;; break;
+                case 1: clownx = clownx - 10; break;
+                case 2: clownx = clownx; break;
+            }
+                
+            switch (randy) {
+                case 0: clowny = clowny + 10;; break;
+                case 1: clowny = clowny - 10; break;
+                case 2: clowny = clowny; break;
+            }
+            
+            clown.setBounds(new Rectangle(clownx,clowny,40,60));    
         }
-        
+        */
     }
     @Override
     public void keyPressed(KeyEvent ke) {
         int k = ke.getKeyCode();
+        
+        Icon catLeft = new ImageIcon("images/cat_left.gif");
+        Icon catRight = new ImageIcon("images/cat_right.gif");
         
         if (k != 0) {
             boolean state = intersect(character, clown);
             if (state == true) {
                 clownx = (int) (Math.random()*(650)+20);
                 clowny = (int) (Math.random()*(400));
-                clown.setBounds(new Rectangle(clownx,clowny,60,60));                
+                clown.setBounds(new Rectangle(clownx,clowny,40,60));                
             }
         }
         //Movement right (and top-right and down-right)
         if(k == ke.VK_RIGHT){
             keyLog[0] = 1;
             getCharacterLocation();
-            if (character.getBounds().getX() > 570.0 && bx > -240.01) {
+            character.setIcon(catRight);
+            if (character.getLocationOnScreen().getX() > 550 && bx > -700) {
                 bx = bx - 10;
+                x = x+10;
                 background.setBounds(bx, by, bw, bh);
+                character.setBounds(x, y, 60, 60);
             } else if (keyLog[2] == 1) {
                 x = x+10;
                 if (x>650){
@@ -282,7 +303,8 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
         if(k == ke.VK_LEFT){
             keyLog[1] = 1;
             getCharacterLocation();
-            if (character.getBounds().getX() < 60.0 && bx < 0) {
+            character.setIcon(catLeft);
+            if (character.getLocationOnScreen().getX() < 10.0 && bx < 0) {
                 bx = bx + 10;
                 background.setBounds(bx, by, bw, bh);
             } else if (keyLog[2] == 1) {
@@ -316,7 +338,7 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
         if(k == ke.VK_UP){
             keyLog[2] = 1;
             getCharacterLocation();
-            if (character.getBounds().getY() < 60.0 && by < -140) {
+            if (character.getLocationOnScreen().getY() < 40.0 && by < -140) {
                 by = by + 10;
                 background.setBounds(bx, by, bw, bh);
             } else if (keyLog[0] == 0 && keyLog[1] == 0) {
@@ -349,16 +371,22 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
         }
         if(k == ke.VK_DOWN){
             keyLog[3] = 1;
-            if (character.getBounds().getY() > 380.0 && by > -360) {
-                by = by - 10;
-                background.setBounds(bx, by, bw, bh);
-            } else if (keyLog[0] == 0 && keyLog[1] == 0) {
-                y = y+10;
-                if (y>400){
-                    y=y-10;
-                }
+            getCharacterLocation();
+            if (character.getLocationOnScreen().getY() < 388 && y > -520) {
+               //If character is within the screen and not hitting bounds
+                y = y + 10;
                 character.setBounds(x, y, 60, 60);
-            } else if (keyLog[0] == 1) {
+            } else if (character.getLocationOnScreen().getY() == 398.0 && y == -520) {
+              
+            } else if (keyLog[0] == 0 && keyLog[1] == 0 && character.getLocationOnScreen().getY() > 368){
+                //If character is hitting 
+                if (by >= -510) {
+                    by = by - 10;
+                    background.setBounds(bx, by, bw, bh);                    
+                }
+                y = y + 10;
+                character.setBounds(x, y, 60, 60);
+            } /* else if (keyLog[0] == 1 && character.getLocationOnScreen().getY() > 388 && by >= -510) {
                 x = x+10;
                 if (x>650){
                     x = x-10;
@@ -368,7 +396,11 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
                     y=y-10;
                 }
                 character.setBounds(x, y, 60, 60);
-            } else if (keyLog[1] == 1) {
+                if (by >= -510) {
+                    by = by - 10;
+                    background.setBounds(bx, by, bw, bh);                    
+                }
+            } else if (keyLog[1] == 1 && character.getLocationOnScreen().getY() > 388 && by >= -510) {
                 x = x-10;
                 if (x<0){
                     x=x+10;
@@ -378,7 +410,26 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
                     y=y-10;
                 }
                 character.setBounds(x, y, 60, 60);
-            }            
+                if (by >= -510) {
+                    by = by - 10;
+                    background.setBounds(bx, by, bw, bh);                    
+                }
+            }*/
+        }
+        if (k == ke.VK_P) {
+            clown.setBounds(0,600,40,60);
+        }
+        if (k == ke.VK_O) {
+            clown.setBounds(600,0,40,60);
+        }
+        if (k == ke.VK_I) {
+            clown.setBounds(600,600,40,60);
+        }
+        if (k == ke.VK_U) {
+            clown.setBounds(0,0,40,60);
+        }
+        if (k == ke.VK_Y) {
+            clown.setBounds(800,0,40,60);
         }
     }
     @Override

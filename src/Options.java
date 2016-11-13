@@ -145,6 +145,14 @@ public class Options extends JPanel implements ActionListener, ItemListener{
                         case 1: jf.G1.character.setIcon(hunter); break;
                         case 2: jf.G1.character.setIcon(skeleton); break;
                     }
+                    
+                Icon day = new ImageIcon("images/map1.png");
+                Icon night = new ImageIcon("images/map2.png");
+                if (String.valueOf(timeSelect.getSelectedItem()) == "Day"){
+                    jf.G1.background.setIcon(day);
+                } else {
+                    jf.G1.background.setIcon(night);
+                }
                 
                 jf.G1.timeNumber = 0;
                 
@@ -155,7 +163,6 @@ public class Options extends JPanel implements ActionListener, ItemListener{
                 
                 
                 //jf.G1.clown_time.setDelay(jf.G1.chosen_difficulty);
-                jf.G1.clown_time.setDelay(60000);
                 jf.G1.clown_time.start();
                 
         }
