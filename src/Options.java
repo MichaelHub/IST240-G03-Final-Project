@@ -118,16 +118,16 @@ public class Options extends JPanel implements ActionListener, ItemListener{
                 jf.G1.chosen_character = String.valueOf(characterSelect.getSelectedItem());
                 
                 if (String.valueOf(difficultySelect.getSelectedItem()) == "Easy"){
-                    jf.G1.chosen_difficulty = 15000;
+                    jf.G1.clown_time.setDelay(300);
                 }
                 if (String.valueOf(difficultySelect.getSelectedItem()) == "Medium"){
-                    jf.G1.chosen_difficulty = 12000;
+                    jf.G1.clown_time.setDelay(200);
                 }
                 if (String.valueOf(difficultySelect.getSelectedItem()) == "Hard"){
-                    jf.G1.chosen_difficulty = 9000;
+                    jf.G1.clown_time.setDelay(100);
                 }
                 if (String.valueOf(difficultySelect.getSelectedItem()) == "Clown Hell"){
-                    jf.G1.chosen_difficulty = 7000;
+                    jf.G1.clown_time.setDelay(50);
                 }
 
                 
@@ -155,14 +155,14 @@ public class Options extends JPanel implements ActionListener, ItemListener{
                 }
                 
                 jf.G1.timeNumber = 0;
+                jf.G1.option1.setVisible(false);
+                jf.G1.option2.setVisible(false);
+                jf.G1.option3.setVisible(false);
                 
                 jf.lpane.remove(jf.L2);
                 jf.lpane.remove(jf.OP);
                 jf.lpane.add(jf.G1);
-                jf.G1.grabFocus();
-                
-                
-                //jf.G1.clown_time.setDelay(jf.G1.chosen_difficulty);
+                jf.G1.grabFocus();                
                 jf.G1.clown_time.start();
                 
         }

@@ -200,54 +200,89 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
         System.out.println("Character Y: " + cy);
         System.out.println("Background X: " + bx);
         System.out.println("Background Y: " + by);
+        System.out.println("Intersect: " + intersect(character, clown));
         System.out.println("--------------");
-        System.out.println(intersect(character, clown));
     }
-    public void generateDirection() {
-        // Generates direction for clown to travel
-        // if 0, doesn't move. if 1, right or up. if 2, left or down.
-        int dir = (int) (Math.floor(Math.random() * 3));
+    public void moveClown() {
+        
+        if (direction[0]==0 && direction[1]==0 && direction[2]==0 && direction[3]==0) {
+            // Generates direction for clown to travel
+            // if 0, doesn't move. if 1, right or up. if 2, left or down.
+            int dir = (int) (Math.floor(Math.random() * 3));
 
-        // Generates how far clown will travel in the location
-        // if 0, 1 spaces. if 1, 2 spaces. if 2, 3 spaces.
-        int period = (int) (Math.floor(Math.random() * 3));
+            // Generates how far clown will travel in the location
+            // if 0, 1 spaces. if 1, 2 spaces. if 2, 3 spaces.
+            int period = (int) (Math.floor(Math.random() * 3));
 
-        //Move left or right
-        switch (period) {
-            case 0: period = 1; break;
-            case 1: period = 2; break;
-            case 2: period = 3; break;
-        }
-        switch (dir) {
-            case 0: direction[0] = 0; direction[1] = 0; break;
-            case 1: direction[0] = period;
-            case 2: direction[1] = period;
-        }
-        if (direction[0] != 0 && (direction[0]*clown_move_speed) + character.getLocationOnScreen().getX() > 616 && -(direction[0]*clown_move_speed) + bx < -700) {
-            System.out.println(-(direction[0]*clown_move_speed) + " and "+ bx + "is less than -700");
-            generateDirection();
-        } else if (direction[1] != 0 && (direction[1]*clown_move_speed) + character.getLocationOnScreen().getX() < 6 && (direction[1]*clown_move_speed) + bx > 0) {
-            System.out.println((direction[1]*clown_move_speed) + " and "+ bx + "is greater than 0");
-            generateDirection();
+            //Move left or right
+            switch (period) {
+                case 0: period = 1; break;
+                case 1: period = 2; break;
+                case 2: period = 3; break;
+            }
+            switch (dir) {
+                case 0: direction[0] = 0; direction[1] = 0; break;
+                case 1: direction[0] = period; break;
+                case 2: direction[1] = period; break;
+            }
+
+            //If left/right movement can't fit, recalculate
+            if (direction[0] != 0 && (direction[0]*clown_move_speed) + clown.getLocationOnScreen().getX() > 616 && -(direction[0]*clown_move_speed) + bx < -700) {
+                //System.out.println(-(direction[0]*clown_move_speed) + " and "+ bx + "is less than -700");
+                moveClown();
+            } else if (direction[1] != 0 && clown.getLocationOnScreen().getX()-(direction[1]*clown_move_speed) < 6 && (direction[1]*clown_move_speed) + bx > 0) {
+                //System.out.println((direction[1]*clown_move_speed) + " and "+ bx + "is greater than 0");
+                moveClown();
+            } else {
+                //System.out.print("Fits");
+            }
+
+            dir = (int) (Math.floor(Math.random() * 3));
+            period = (int) (Math.floor(Math.random() * 3));
+
+            //Move up or down
+            switch (period) {
+                case 0: period = 3; break;
+                case 1: period = 6; break;
+                case 2: period = 9; break;
+            }
+
+            switch (dir) {
+                case 0: direction[2] = 0; direction[3] = 0; break;
+                case 1: direction[2] = period; break;
+                case 2: direction[3] = period; break;
+            }
+
+            //If up/down movement can't fit, recalculate
+            if (direction[2] != 0 && clown.getLocationOnScreen().getY() + (direction[2]*clown_move_speed) < 36 && (direction[2]*clown_move_speed) + by > 0) {
+                //System.out.println((direction[2]*clown_move_speed) + " and "+ by + "is greater than 0");
+                moveClown();
+            } else if (direction[3] != 0 && clown.getLocationOnScreen().getY() + (direction[3]*clown_move_speed) > 396 && by - (direction[3]*clown_move_speed) < -520) {
+                //System.out.println((direction[3]*clown_move_speed) + " and "+ by + " is less than -520.");
+                moveClown();
+            } else {
+                //System.out.print("Fits");
+            }
         } else {
-            System.out.print("Fits");
+            if (direction[0] > 0) {
+                clownx = clownx + clown_move_speed;
+                direction[0]--;
+            } else if (direction[1] > 0) {
+                clownx = clownx - clown_move_speed;
+                direction[1]--;                
+            }
+            
+            if (direction[2] > 0) {
+                clowny = clowny - clown_move_speed;
+                direction[2]--;
+            } else if (direction[3] > 0) {
+                clowny = clowny + clown_move_speed;
+                direction[3]--;                
+            }
+            
+            clown.setBounds(clownx, clowny, 40, 60);
         }
-
-        dir = (int) (Math.floor(Math.random() * 3));
-        period = (int) (Math.floor(Math.random() * 3));
-
-        //Move up or down
-        switch (period) {
-            case 0: period = 3; break;
-            case 1: period = 6; break;
-            case 2: period = 9; break;
-        }
-
-        switch (dir) {
-            case 0: break;
-            case 1: direction[2] = period;
-            case 2: direction[3] = period;
-        }
+        
     }
     
     public boolean intersect(JLabel one, JLabel two){
@@ -260,6 +295,16 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
         Object obj = event.getSource();
         if (obj == menuMain)
             {
+                direction[0] = 0;
+                direction[1] = 0;
+                direction[2] = 0;
+                direction[3] = 0;
+                jf.G1.clown_time.stop();
+                score_count = 0;
+                scoreDisplay.setText("Score: " + score_count);
+                jf.G1.time.stop();
+                timeNumber = 0;
+                timeDisplay.setText("Time: " + timeNumber);
                 gameMenu.setVisible(false); 
                 jf.lpane.remove(jf.G1);
                 jf.lpane.add(jf.L1);
@@ -272,6 +317,16 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
             gameMenu.setVisible(false);            
         }
         if (obj == menuOptions) {
+            direction[0] = 0;
+            direction[1] = 0;
+            direction[2] = 0;
+            direction[3] = 0;
+            jf.G1.clown_time.stop();
+            score_count = 0;
+            scoreDisplay.setText("Score: " + score_count);
+            jf.G1.time.stop();
+            timeNumber = 0;
+            timeDisplay.setText("Time: " + timeNumber);
             gameMenu.setVisible(false); 
             jf.lpane.remove(jf.G1);
             jf.lpane.add(jf.OP);
@@ -282,30 +337,7 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
             timeDisplay.setText("Time: " + timeNumber);
         }
         if (obj == clown_time){
-        /*
-            int randx = (int) (Math.floor(Math.random() * 3));
-            int randy = (int) (Math.floor(Math.random() * 3));
-                
-            switch (randx) {
-                case 0: clownx = clownx + 10;; break;
-                case 1: clownx = clownx - 10; break;
-                case 2: clownx = clownx; break;
-            }
-                
-            switch (randy) {
-                case 0: clowny = clowny + 10;; break;
-                case 1: clowny = clowny - 10; break;
-                case 2: clowny = clowny; break;
-            }
-            
-            clown.setBounds(new Rectangle(clownx,clowny,40,60));  
-        */
-            if (direction[0]==0 && direction[1]==0 && direction[2]==0 && direction[3]==0) {
-                
-            }
-            if (direction[0] != 0) {
-                
-            }
+            moveClown();
         }
     }
     @Override
@@ -318,9 +350,17 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
         if (k != 0) {
             boolean state = intersect(character, clown);
             if (state == true) {
-                clownx = (int) (Math.random()*(650)+20);
-                clowny = (int) (Math.random()*(400));
-                clown.setBounds(new Rectangle(clownx,clowny,40,60));                
+                clownx = (int) (Math.random()*(950)+250);
+                System.out.println(clownx);
+                clowny = (int) (Math.random()*(250)+250);
+                System.out.println(clowny);
+                clown.setBounds(new Rectangle(clownx,clowny,40,60));
+                direction[0] = 0;
+                direction[1] = 0;
+                direction[2] = 0;
+                direction[3] = 0;
+                score_count++;
+                scoreDisplay.setText("Score: " + score_count);
             }
         }
         //Movement right (and top-right and down-right)
@@ -521,7 +561,16 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
             }
         }
         if (k == ke.VK_R) {
-            generateDirection();
+            moveClown();
+        }
+        if (k == ke.VK_P) {
+            clown_move_speed = 50;
+        }
+        if (k == ke.VK_O) {
+            clown_move_speed = 30;
+        }
+        if (k == ke.VK_I) {
+            clown_move_speed = 20;
         }
     }
     @Override
