@@ -28,6 +28,10 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
     //Settings
     String chosen_character, chosen_time;
     int chosen_difficulty;
+    int clown_move_speed;
+           
+    //Stores where to move and how long
+    int direction[] = new int [4];
     
     GamePanel (myJFrame jf) {
         this.jf = jf;
@@ -48,6 +52,15 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
         keyLog[1] = 0;
         keyLog[2] = 0;
         keyLog[3] = 0;
+        
+        //Intial directions for clowns
+        direction[0] = 0; // right
+        direction[1] = 0; // left
+        direction[2] = 0; // up
+        direction[3] = 0; // down
+        
+        //default clown movement speed
+        clown_move_speed = 10;
         
         //Menu within gameScreen
         gameMenu = new JPanel();
@@ -117,12 +130,9 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
         option3.setBounds(200, 100, 80, 50);
         gameScreen.add(option3);
         character = new JLabel();
-        x = 0;
-        y = 30;
+        x = 333;
+        y = 228;
         character.setBounds(x, y, 40, 40);
-        //gameScreen.add(character);
-        
-                
         
         clown = new JLabel();
         clownx = 100;
@@ -193,6 +203,52 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
         System.out.println("--------------");
         System.out.println(intersect(character, clown));
     }
+    public void generateDirection() {
+        // Generates direction for clown to travel
+        // if 0, doesn't move. if 1, right or up. if 2, left or down.
+        int dir = (int) (Math.floor(Math.random() * 3));
+
+        // Generates how far clown will travel in the location
+        // if 0, 1 spaces. if 1, 2 spaces. if 2, 3 spaces.
+        int period = (int) (Math.floor(Math.random() * 3));
+
+        //Move left or right
+        switch (period) {
+            case 0: period = 1; break;
+            case 1: period = 2; break;
+            case 2: period = 3; break;
+        }
+        switch (dir) {
+            case 0: direction[0] = 0; direction[1] = 0; break;
+            case 1: direction[0] = period;
+            case 2: direction[1] = period;
+        }
+        if (direction[0] != 0 && (direction[0]*clown_move_speed) + character.getLocationOnScreen().getX() > 616 && -(direction[0]*clown_move_speed) + bx < -700) {
+            System.out.println(-(direction[0]*clown_move_speed) + " and "+ bx + "is less than -700");
+            generateDirection();
+        } else if (direction[1] != 0 && (direction[1]*clown_move_speed) + character.getLocationOnScreen().getX() < 6 && (direction[1]*clown_move_speed) + bx > 0) {
+            System.out.println((direction[1]*clown_move_speed) + " and "+ bx + "is greater than 0");
+            generateDirection();
+        } else {
+            System.out.print("Fits");
+        }
+
+        dir = (int) (Math.floor(Math.random() * 3));
+        period = (int) (Math.floor(Math.random() * 3));
+
+        //Move up or down
+        switch (period) {
+            case 0: period = 3; break;
+            case 1: period = 6; break;
+            case 2: period = 9; break;
+        }
+
+        switch (dir) {
+            case 0: break;
+            case 1: direction[2] = period;
+            case 2: direction[3] = period;
+        }
+    }
     
     public boolean intersect(JLabel one, JLabel two){
        Rectangle rectB = two.getBounds();
@@ -225,8 +281,8 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
             timeNumber++;
             timeDisplay.setText("Time: " + timeNumber);
         }
-        /*
         if (obj == clown_time){
+        /*
             int randx = (int) (Math.floor(Math.random() * 3));
             int randy = (int) (Math.floor(Math.random() * 3));
                 
@@ -242,9 +298,15 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
                 case 2: clowny = clowny; break;
             }
             
-            clown.setBounds(new Rectangle(clownx,clowny,40,60));    
-        }
+            clown.setBounds(new Rectangle(clownx,clowny,40,60));  
         */
+            if (direction[0]==0 && direction[1]==0 && direction[2]==0 && direction[3]==0) {
+                
+            }
+            if (direction[0] != 0) {
+                
+            }
+        }
     }
     @Override
     public void keyPressed(KeyEvent ke) {
@@ -266,37 +328,50 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
             keyLog[0] = 1;
             getCharacterLocation();
             character.setIcon(catRight);
-            if (character.getLocationOnScreen().getX() > 550 && bx > -700) {
-                bx = bx - 10;
-                x = x+10;
-                background.setBounds(bx, by, bw, bh);
-                character.setBounds(x, y, 60, 60);
+            //if (character.getLocationOnScreen().getX() < 606 && bx > -700) {
+            if (keyLog[2] == 0 && keyLog[3] == 0) {
+                if (character.getLocationOnScreen().getX() < 616) {
+                    x = x+10;
+                    character.setBounds(x, y, 60, 60);                    
+                }
+                if (character.getLocationOnScreen().getX() == 616 && bx > -700) {
+                    bx = bx - 10;
+                    background.setBounds(bx, by, bw, bh);   
+                }
             } else if (keyLog[2] == 1) {
-                x = x+10;
-                if (x>650){
-                    x = x-10;
+                if (character.getLocationOnScreen().getX() < 616) {
+                    x = x+10;
+                    //if character is not at the top of the screen
+                    if (character.getLocationOnScreen().getY() > 36) {
+                        y=y-10;
+                    }
+                    character.setBounds(x, y, 60, 60);    
                 }
-                y = y-10;
-                if (y<30){
-                    y=y+10;
+                if (character.getLocationOnScreen().getX() == 616 && bx > -700) {
+                    bx = bx - 10;
+                    background.setBounds(bx, by, bw, bh);   
                 }
-                character.setBounds(x, y, 60, 60);
+                if (character.getLocationOnScreen().getY() == 36 && by < -140) {
+                    by = by + 10;
+                    background.setBounds(bx, by, bw, bh);   
+                }
             } else if (keyLog[3] == 1) {
-                x = x+10;
-                if (x>650){
-                    x = x-10;
+                if (character.getLocationOnScreen().getX() < 616) {
+                    x = x+10;
+                    //if character is not at the top of the screen
+                    if (character.getLocationOnScreen().getY() < 396) {
+                        y=y+10;
+                    }
+                    character.setBounds(x, y, 60, 60);    
                 }
-                y = y+10;
-                if (y<30){
-                    y=y-10;
+                if (character.getLocationOnScreen().getX() == 616 && bx > -700) {
+                    bx = bx - 10;
+                    background.setBounds(bx, by, bw, bh);   
                 }
-                character.setBounds(x, y, 60, 60);
-            } else {
-                x = x+10;
-                if (x>650){
-                    x = x-10;
+                if (character.getLocationOnScreen().getY() == 396 && by > -520) {
+                    by = by - 10;
+                    background.setBounds(bx, by, bw, bh);   
                 }
-                character.setBounds(x, y, 60, 60);
             }
         }
         //Movement left (and down-left and down-right)
@@ -304,132 +379,149 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
             keyLog[1] = 1;
             getCharacterLocation();
             character.setIcon(catLeft);
-            if (character.getLocationOnScreen().getX() < 10.0 && bx < 0) {
-                bx = bx + 10;
-                background.setBounds(bx, by, bw, bh);
+            if (keyLog[2] == 0 && keyLog[3] == 0) {
+                if (character.getLocationOnScreen().getX() > 6) {
+                    x = x-10;
+                    character.setBounds(x, y, 60, 60);
+                }
+                if (character.getLocationOnScreen().getX() == 6 && bx < 0) {
+                    bx = bx + 10;
+                    background.setBounds(bx, by, bw, bh);   
+                }
             } else if (keyLog[2] == 1) {
-                x = x-10;
-                if (x<0){
-                    x=x+10;
+                if (character.getLocationOnScreen().getX() > 6) {
+                    x = x-10;
+                    //if character is not at the top of the screen
+                    if (character.getLocationOnScreen().getY() > 36) {
+                        y=y-10;
+                    }
+                    character.setBounds(x, y, 60, 60);    
                 }
-                y = y-10;
-                if (y<30){
-                    y=y+10;
+                if (character.getLocationOnScreen().getX() == 6 && bx < 0) {
+                    bx = bx + 10;
+                    background.setBounds(bx, by, bw, bh);   
                 }
-                character.setBounds(x, y, 60, 60);
+                if (character.getLocationOnScreen().getY() == 36 && by < -140) {
+                    by = by + 10;
+                    background.setBounds(bx, by, bw, bh);   
+                }
             } else if (keyLog[3] == 1) {
-                x = x-10;
-                if (x<0){
-                    x=x+10;
+                if (character.getLocationOnScreen().getX() > 0) {
+                    x = x-10;
+                    //if character is not at the top of the screen
+                    if (character.getLocationOnScreen().getY() < 396) {
+                        y=y+10;
+                    }
+                    character.setBounds(x, y, 60, 60);    
                 }
-                y = y+10;
-                if (y<30){
-                    y=y-10;
+                if (character.getLocationOnScreen().getX() == 6 && bx < 0) {
+                    bx = bx + 10;
+                    background.setBounds(bx, by, bw, bh);   
                 }
-                character.setBounds(x, y, 60, 60);
-            } else {
-                x = x-10;
-                if (x<0){
-                    x=x+10;
+                if (character.getLocationOnScreen().getY() == 396 && by > -520) {
+                    by = by - 10;
+                    background.setBounds(bx, by, bw, bh);   
                 }
-                character.setBounds(x, y, 60, 60);
             }
         }
         if(k == ke.VK_UP){
             keyLog[2] = 1;
             getCharacterLocation();
-            if (character.getLocationOnScreen().getY() < 40.0 && by < -140) {
-                by = by + 10;
-                background.setBounds(bx, by, bw, bh);
-            } else if (keyLog[0] == 0 && keyLog[1] == 0) {
-                y = y-10;
-                if (y<30){
-                    y=y+10;
+            if (keyLog[0] == 0 && keyLog[1] == 0) {
+                if (character.getLocationOnScreen().getY() > 36) {
+                    y = y-10;
+                    character.setBounds(x, y, 60, 60);
                 }
-                character.setBounds(x, y, 60, 60);
+                if (by < 0 && character.getLocationOnScreen().getY() == 36) {
+                    by = by + 10;
+                    background.setBounds(bx, by, bw, bh);                    
+                }
             } else if (keyLog[0] == 1) {
-                x = x+10;
-                if (x>650){
+                if (character.getLocationOnScreen().getX() < 616) {
+                    x = x+10;
+                    //if character is not at the top of the screen
+                    if (character.getLocationOnScreen().getY() > 36) {
+                        y=y-10;
+                    }
+                    character.setBounds(x, y, 60, 60);    
+                }
+                if (character.getLocationOnScreen().getX() == 616 && bx > -700) {
+                    bx = bx - 10;
+                    background.setBounds(bx, by, bw, bh);   
+                }
+                if (character.getLocationOnScreen().getY() == 36 && by < -140) {
+                    by = by + 10;
+                    background.setBounds(bx, by, bw, bh);   
+                }
+            } else if (keyLog[1] == 0) {
+                if (character.getLocationOnScreen().getX() > 6) {
                     x = x-10;
+                    //if character is not at the top of the screen
+                    if (character.getLocationOnScreen().getY() > 36) {
+                        y=y-10;
+                    }
+                    character.setBounds(x, y, 60, 60);    
                 }
-                y = y-10;
-                if (y<30){
-                    y=y+10;
+                if (character.getLocationOnScreen().getX() == 6 && bx < 0) {
+                    bx = bx + 10;
+                    background.setBounds(bx, by, bw, bh);   
                 }
-                character.setBounds(x, y, 60, 60);
-            } else if (keyLog[1] == 1) {
-                x = x-10;
-                if (x<0){
-                    x=x+10;
+                if (character.getLocationOnScreen().getY() == 36 && by < -140) {
+                    by = by + 10;
+                    background.setBounds(bx, by, bw, bh);   
                 }
-                y = y-10;
-                if (y<30){
-                    y=y+10;
-                }
-                character.setBounds(x, y, 60, 60);
             }
         }
         if(k == ke.VK_DOWN){
             keyLog[3] = 1;
             getCharacterLocation();
-            if (character.getLocationOnScreen().getY() < 388 && y > -520) {
-               //If character is within the screen and not hitting bounds
-                y = y + 10;
-                character.setBounds(x, y, 60, 60);
-            } else if (character.getLocationOnScreen().getY() == 398.0 && y == -520) {
-              
-            } else if (keyLog[0] == 0 && keyLog[1] == 0 && character.getLocationOnScreen().getY() > 368){
-                //If character is hitting 
-                if (by >= -510) {
+            if (keyLog[0] == 0 && keyLog[1] == 0) {
+                if (character.getLocationOnScreen().getY() < 396) {
+                    y = y+10;
+                    character.setBounds(x, y, 60, 60);
+                }
+                if (by > -520 && character.getLocationOnScreen().getY() == 396) {
                     by = by - 10;
                     background.setBounds(bx, by, bw, bh);                    
                 }
-                y = y + 10;
-                character.setBounds(x, y, 60, 60);
-            } /* else if (keyLog[0] == 1 && character.getLocationOnScreen().getY() > 388 && by >= -510) {
-                x = x+10;
-                if (x>650){
+            } else if (keyLog[0] == 1) {
+                if (character.getLocationOnScreen().getX() < 616) {
+                    x = x+10;
+                    //if character is not at the top of the screen
+                    if (character.getLocationOnScreen().getY() < 396) {
+                        y=y+10;
+                    }
+                    character.setBounds(x, y, 60, 60);    
+                }
+                if (character.getLocationOnScreen().getX() == 616 && bx > -700) {
+                    bx = bx - 10;
+                    background.setBounds(bx, by, bw, bh);   
+                }
+                if (character.getLocationOnScreen().getY() == 396 && by > -520) {
+                    by = by - 10;
+                    background.setBounds(bx, by, bw, bh);   
+                }                
+            } else if (keyLog[1] == 1) {
+                if (character.getLocationOnScreen().getX() > 0) {
                     x = x-10;
+                    //if character is not at the top of the screen
+                    if (character.getLocationOnScreen().getY() < 396) {
+                        y=y+10;
+                    }
+                    character.setBounds(x, y, 60, 60);    
                 }
-                y = y+10;
-                if (y>400){
-                    y=y-10;
+                if (character.getLocationOnScreen().getX() == 6 && bx < 0) {
+                    bx = bx + 10;
+                    background.setBounds(bx, by, bw, bh);   
                 }
-                character.setBounds(x, y, 60, 60);
-                if (by >= -510) {
+                if (character.getLocationOnScreen().getY() == 396 && by > -520) {
                     by = by - 10;
-                    background.setBounds(bx, by, bw, bh);                    
-                }
-            } else if (keyLog[1] == 1 && character.getLocationOnScreen().getY() > 388 && by >= -510) {
-                x = x-10;
-                if (x<0){
-                    x=x+10;
-                }
-                y = y+10;
-                if (y>400){
-                    y=y-10;
-                }
-                character.setBounds(x, y, 60, 60);
-                if (by >= -510) {
-                    by = by - 10;
-                    background.setBounds(bx, by, bw, bh);                    
-                }
-            }*/
+                    background.setBounds(bx, by, bw, bh);   
+                }                
+            }
         }
-        if (k == ke.VK_P) {
-            clown.setBounds(0,600,40,60);
-        }
-        if (k == ke.VK_O) {
-            clown.setBounds(600,0,40,60);
-        }
-        if (k == ke.VK_I) {
-            clown.setBounds(600,600,40,60);
-        }
-        if (k == ke.VK_U) {
-            clown.setBounds(0,0,40,60);
-        }
-        if (k == ke.VK_Y) {
-            clown.setBounds(800,0,40,60);
+        if (k == ke.VK_R) {
+            generateDirection();
         }
     }
     @Override
