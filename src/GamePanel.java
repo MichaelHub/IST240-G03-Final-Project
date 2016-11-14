@@ -28,6 +28,7 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
     //Settings
     String chosen_character, chosen_time;
     int chosen_difficulty;
+    int clown_move_speed;
            
     //Stores where to move and how long
     int direction[] = new int [4];
@@ -57,6 +58,9 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
         direction[1] = 0; // left
         direction[2] = 0; // up
         direction[3] = 0; // down
+        
+        //default clown movement speed
+        clown_move_speed = 10;
         
         //Menu within gameScreen
         gameMenu = new JPanel();
@@ -199,6 +203,52 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
         System.out.println("--------------");
         System.out.println(intersect(character, clown));
     }
+    public void generateDirection() {
+        // Generates direction for clown to travel
+        // if 0, doesn't move. if 1, right or up. if 2, left or down.
+        int dir = (int) (Math.floor(Math.random() * 3));
+
+        // Generates how far clown will travel in the location
+        // if 0, 1 spaces. if 1, 2 spaces. if 2, 3 spaces.
+        int period = (int) (Math.floor(Math.random() * 3));
+
+        //Move left or right
+        switch (period) {
+            case 0: period = 1; break;
+            case 1: period = 2; break;
+            case 2: period = 3; break;
+        }
+        switch (dir) {
+            case 0: direction[0] = 0; direction[1] = 0; break;
+            case 1: direction[0] = period;
+            case 2: direction[1] = period;
+        }
+        if (direction[0] != 0 && (direction[0]*clown_move_speed) + character.getLocationOnScreen().getX() > 616 && -(direction[0]*clown_move_speed) + bx < -700) {
+            System.out.println(-(direction[0]*clown_move_speed) + " and "+ bx + "is less than -700");
+            generateDirection();
+        } else if (direction[1] != 0 && (direction[1]*clown_move_speed) + character.getLocationOnScreen().getX() < 6 && (direction[1]*clown_move_speed) + bx > 0) {
+            System.out.println((direction[1]*clown_move_speed) + " and "+ bx + "is greater than 0");
+            generateDirection();
+        } else {
+            System.out.print("Fits");
+        }
+
+        dir = (int) (Math.floor(Math.random() * 3));
+        period = (int) (Math.floor(Math.random() * 3));
+
+        //Move up or down
+        switch (period) {
+            case 0: period = 3; break;
+            case 1: period = 6; break;
+            case 2: period = 9; break;
+        }
+
+        switch (dir) {
+            case 0: break;
+            case 1: direction[2] = period;
+            case 2: direction[3] = period;
+        }
+    }
     
     public boolean intersect(JLabel one, JLabel two){
        Rectangle rectB = two.getBounds();
@@ -250,15 +300,12 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
             
             clown.setBounds(new Rectangle(clownx,clowny,40,60));  
         */
-            // Generates direction for clown to travel
-            // if 1, doesn't move. if 2, left or up. if 3, right or down.
-            int dir = (int) (Math.floor(Math.random() * 3));
-            
-            // Generates how far clown will travel in the location
-            // if 1, 3 spaces. if 2, 6 spaces. if 3, 9 spaces.
-            int period = (int) (Math.floor(Math.random() * 3));
-            
-            
+            if (direction[0]==0 && direction[1]==0 && direction[2]==0 && direction[3]==0) {
+                
+            }
+            if (direction[0] != 0) {
+                
+            }
         }
     }
     @Override
@@ -472,6 +519,9 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
                     background.setBounds(bx, by, bw, bh);   
                 }                
             }
+        }
+        if (k == ke.VK_R) {
+            generateDirection();
         }
     }
     @Override
