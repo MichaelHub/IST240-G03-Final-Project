@@ -408,7 +408,7 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
                     bx = bx - 10;
                     background.setBounds(bx, by, bw, bh);   
                 }
-                if (character.getLocationOnScreen().getY() == 396 && by > -520) {
+                if ((character.getLocationOnScreen().getY() == 396 || character.getLocationOnScreen().getY() == 402) && by > -520) {
                     by = by - 10;
                     background.setBounds(bx, by, bw, bh);   
                 }
@@ -458,7 +458,7 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
                     bx = bx + 10;
                     background.setBounds(bx, by, bw, bh);   
                 }
-                if (character.getLocationOnScreen().getY() == 396 && by > -520) {
+                if ((character.getLocationOnScreen().getY() == 396 || character.getLocationOnScreen().getY() == 402) && by > -520) {
                     by = by - 10;
                     background.setBounds(bx, by, bw, bh);   
                 }
@@ -520,7 +520,7 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
                     y = y+10;
                     character.setBounds(x, y, 60, 60);
                 }
-                if (by > -520 && character.getLocationOnScreen().getY() == 396) {
+                if (by > -520 && ((character.getLocationOnScreen().getY() == 396 || character.getLocationOnScreen().getY() == 402) || character.getLocationOnScreen().getY() == 402)) {
                     by = by - 10;
                     background.setBounds(bx, by, bw, bh);                    
                 }
@@ -537,7 +537,7 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
                     bx = bx - 10;
                     background.setBounds(bx, by, bw, bh);   
                 }
-                if (character.getLocationOnScreen().getY() == 396 && by > -520) {
+                if ((character.getLocationOnScreen().getY() == 396 || character.getLocationOnScreen().getY() == 402) && by > -520) {
                     by = by - 10;
                     background.setBounds(bx, by, bw, bh);   
                 }                
@@ -554,7 +554,7 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
                     bx = bx + 10;
                     background.setBounds(bx, by, bw, bh);   
                 }
-                if (character.getLocationOnScreen().getY() == 396 && by > -520) {
+                if ((character.getLocationOnScreen().getY() == 396 || character.getLocationOnScreen().getY() == 402) && by > -520) {
                     by = by - 10;
                     background.setBounds(bx, by, bw, bh);   
                 }                
