@@ -350,11 +350,11 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
         if (k != 0) {
             boolean state = intersect(character, clown);
             if (state == true) {
-                clownx = (int) (Math.random()*(950)+250);
+                clownx = (int) (Math.random()*(650)+250);
                 System.out.println(clownx);
-                clowny = (int) (Math.random()*(250)+250);
+                clowny = (int) (Math.random()*(150)+250);
                 System.out.println(clowny);
-                clown.setBounds(new Rectangle(clownx,clowny,40,60));
+                clown.setBounds(clownx,clowny,40,60);
                 direction[0] = 0;
                 direction[1] = 0;
                 direction[2] = 0;
