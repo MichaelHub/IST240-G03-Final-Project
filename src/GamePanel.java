@@ -451,6 +451,7 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
                 }
                 if (character.getLocation().getX() <= 6 + (-bx) && bx < 0) {
                     bx = bx + 10;
+                    x = x-10;
                 }
                 if (character.getLocation().getY() > 36 + (-by)) {
                     y = y-10;
