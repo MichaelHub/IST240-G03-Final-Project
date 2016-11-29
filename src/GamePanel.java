@@ -36,6 +36,21 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
     //Stores where to move and how long
     int direction[] = new int [4];
     
+        
+    Icon catLeft = new ImageIcon("images/cat_left.gif");
+    Icon catRight = new ImageIcon("images/cat_right.gif");
+    Icon hunterLeft = new ImageIcon("images/hunter_left.gif");
+    Icon hunterRight = new ImageIcon("images/hunter_right.gif");
+    Icon skeletonLeft = new ImageIcon("images/skeleton_left.gif");
+    Icon skeletonRight = new ImageIcon("images/skeleton_right.gif");
+
+    Icon catStillLeft = new ImageIcon("images/cat_still_left.gif");
+    Icon catStillRight = new ImageIcon("images/cat_still_right.gif");
+    Icon hunterStillLeft = new ImageIcon("images/hunter_still_left.gif");
+    Icon hunterStillRight = new ImageIcon("images/hunter_still_right.gif");
+    Icon skeletonStillLeft = new ImageIcon("images/skeleton_still_left.gif");
+    Icon skeletonStillRight = new ImageIcon("images/skeleton_still_right.gif");
+    
     GamePanel (myJFrame jf) {
         this.jf = jf;
         
@@ -215,7 +230,31 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
         System.out.println("Intersect: " + intersect(character, clown));
         System.out.println("--------------");
     }
+      
+    public void getClownLocation(int up, int down) {
+        double cx = clown.getLocation().getX();
+        double cy = clown.getLocation().getY();
+        System.out.println("Clown X: " + cx);
+        System.out.println("Clown Y: " + cy);        
+        if (up != 0) {
+            double up1 = clown.getLocation().getY() + (direction[2]*clown_move_speed);
+            double up2 = (direction[2]*clown_move_speed) + by;
+            System.out.println("UP IF1, should be < 36: " + up1);
+            System.out.println("UP IF2, should be > 0: " + up2);
+        } else if (down != 0) {
+            double down1 = clown.getLocation().getY() + (direction[3]*clown_move_speed);
+            double down2 = by - (direction[3]*clown_move_speed);
+            System.out.println("DOWN IF1, should be > 396: " + down1);
+            System.out.println("DOWN IF2, should be < -520: " + down2);
+        }
+    }
+    
     public void moveClown() {
+        
+        // direction[0]  right
+        // direction[1]   left
+        // direction[2]   up
+        // direction[3]   down
         
         if (direction[0]==0 && direction[1]==0 && direction[2]==0 && direction[3]==0) {
             // Generates direction for clown to travel
@@ -237,12 +276,11 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
                 case 1: direction[0] = period; break;
                 case 2: direction[1] = period; break;
             }
-
             //If left/right movement can't fit, recalculate
-            if (direction[0] != 0 && (direction[0]*clown_move_speed) + clown.getLocation().getX() > 616 && -(direction[0]*clown_move_speed) + bx < -700) {
+            if (direction[0] != 0 && clown_move_speed - clownx < 1350) {
                 //System.out.println(-(direction[0]*clown_move_speed) + " and "+ bx + "is less than -700");
                 moveClown();
-            } else if (direction[1] != 0 && clown.getLocation().getX()-(direction[1]*clown_move_speed) < 6 && (direction[1]*clown_move_speed) + bx > 0) {
+            } else if (clownx + clown_move_speed> 50) {
                 //System.out.println((direction[1]*clown_move_speed) + " and "+ bx + "is greater than 0");
                 moveClown();
             } else {
@@ -264,12 +302,13 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
                 case 1: direction[2] = period; break;
                 case 2: direction[3] = period; break;
             }
+            getClownLocation(direction[2],direction[3]);
 
             //If up/down movement can't fit, recalculate
-            if (direction[2] != 0 && clown.getLocation().getY() + (direction[2]*clown_move_speed) < 36 && (direction[2]*clown_move_speed) + by > 0) {
+            if (direction[2] != 0 && (clowny + clown_move_speed) > 50) {
                 //System.out.println((direction[2]*clown_move_speed) + " and "+ by + "is greater than 0");
                 moveClown();
-            } else if (direction[3] != 0 && clown.getLocation().getY() + (direction[3]*clown_move_speed) > 396 && by - (direction[3]*clown_move_speed) < -520) {
+            } else if (direction[3] != 0 && (clowny - clown_move_speed) > 600) {
                 //System.out.println((direction[3]*clown_move_speed) + " and "+ by + " is less than -520.");
                 moveClown();
             } else {
@@ -278,18 +317,18 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
         } else {
             if (direction[0] > 0) {
                 clownx = clownx + clown_move_speed;
-                direction[0]--;
+                direction[0] = 0;
             } else if (direction[1] > 0) {
                 clownx = clownx - clown_move_speed;
-                direction[1]--;                
+                direction[1] = 0;              
             }
             
             if (direction[2] > 0) {
                 clowny = clowny - clown_move_speed;
-                direction[2]--;
+                direction[2] = 0;
             } else if (direction[3] > 0) {
                 clowny = clowny + clown_move_speed;
-                direction[3]--;                
+                direction[3] = 0;             
             }
             
             clown.setBounds(clownx, clowny, 40, 60);
@@ -356,9 +395,6 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
     public void keyPressed(KeyEvent ke) {
         int k = ke.getKeyCode();
         
-        Icon catLeft = new ImageIcon("images/cat_left.gif");
-        Icon catRight = new ImageIcon("images/cat_right.gif");
-        
         if (k != 0) {
             boolean state = intersect(character, clown);
             if (state == true) {
@@ -378,8 +414,14 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
         //Movement right (and top-right and down-right)
         if(k == ke.VK_RIGHT){
             keyLog[0] = 1;
-            getCharacterLocation();
-            character.setIcon(catRight);
+            //getCharacterLocation();
+            if (option1.getText() == "Cat") {
+                character.setIcon(catRight);
+            } else if (option1.getText() == "Hunter") {
+                character.setIcon(hunterRight);
+            } else if (option1.getText() == "Skeleton") {
+                character.setIcon(skeletonRight);
+            }
             //if (character.getLocation().getX() < 606 && bx > -700) {
             if (keyLog[2] == 0 && keyLog[3] == 0) {
                 if (character.getLocation().getX() < 616 + (-bx)) {
@@ -434,8 +476,14 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
         //Movement left (and down-left and down-right)
         if(k == ke.VK_LEFT){
             keyLog[1] = 1;
-            getCharacterLocation();
-            character.setIcon(catLeft);
+            //getCharacterLocation();
+            if (option1.getText() == "Cat") {
+                character.setIcon(catLeft);
+            } else if (option1.getText() == "Hunter") {
+                character.setIcon(hunterLeft);
+            } else if (option1.getText() == "Skeleton") {
+                character.setIcon(skeletonLeft);
+            }
             if (keyLog[2] == 0 && keyLog[3] == 0) {
                 if (character.getLocation().getX() > 6 + (-bx)) {
                     x = x-10;
@@ -487,7 +535,20 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
         }
         if(k == ke.VK_UP){
             keyLog[2] = 1;
-            getCharacterLocation();
+            //getCharacterLocation();
+            if (character.getIcon() == catStillLeft) {
+                character.setIcon(catLeft);
+            } else if (character.getIcon() == catStillRight) {
+                character.setIcon(catRight);
+            } else if (character.getIcon() == hunterStillLeft) {
+                character.setIcon(hunterLeft);
+            } else if (character.getIcon() == hunterStillRight) {
+                character.setIcon(hunterRight);
+            } else if (character.getIcon() == skeletonStillLeft) {
+                character.setIcon(skeletonLeft);
+            } else if (character.getIcon() == skeletonStillRight) {
+                character.setIcon(skeletonRight);
+            }
             if (keyLog[0] == 0 && keyLog[1] == 0) {
                 if (character.getLocation().getY() > 36 + (-by)) {
                     y = y-10;
@@ -537,7 +598,20 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
         }
         if(k == ke.VK_DOWN){
             keyLog[3] = 1;
-            getCharacterLocation();
+            //getCharacterLocation();
+            if (character.getIcon() == catStillLeft) {
+                character.setIcon(catLeft);
+            } else if (character.getIcon() == catStillRight) {
+                character.setIcon(catRight);
+            } else if (character.getIcon() == hunterStillLeft) {
+                character.setIcon(hunterLeft);
+            } else if (character.getIcon() == hunterStillRight) {
+                character.setIcon(hunterRight);
+            } else if (character.getIcon() == skeletonStillLeft) {
+                character.setIcon(skeletonLeft);
+            } else if (character.getIcon() == skeletonStillRight) {
+                character.setIcon(skeletonRight);
+            }
             if (keyLog[0] == 0 && keyLog[1] == 0) {
                 if (character.getLocation().getY() < 396 + (-by)) {
                     y = y+10;
@@ -606,19 +680,59 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
     }
     @Override
     public void keyReleased(KeyEvent ke) {
-       int k = ke.getKeyCode();
+        int k = ke.getKeyCode();
         
         if(k == ke.VK_RIGHT){
             keyLog[0] = 0;
+            if (option1.getText() == "Cat") {
+                character.setIcon(catStillRight);
+            } else if (option1.getText() == "Hunter") {
+                character.setIcon(hunterStillRight);
+            } else if (option1.getText() == "Skeleton") {
+                character.setIcon(skeletonStillRight);
+            }
         }
         if(k == ke.VK_LEFT){
             keyLog[1] = 0;
+            if (option1.getText() == "Cat") {
+                character.setIcon(catStillLeft);
+            } else if (option1.getText() == "Hunter") {
+                character.setIcon(hunterStillLeft);
+            } else if (option1.getText() == "Skeleton") {
+                character.setIcon(skeletonStillLeft);
+            }
         }
         if(k == ke.VK_UP){
             keyLog[2] = 0;
+            if (character.getIcon() == catLeft) {
+                character.setIcon(catStillLeft);
+            } else if (character.getIcon() == catRight) {
+                character.setIcon(catStillRight);
+            } else if (character.getIcon() == hunterLeft) {
+                character.setIcon(hunterStillLeft);
+            } else if (character.getIcon() == hunterRight) {
+                character.setIcon(hunterStillRight);
+            } else if (character.getIcon() == skeletonLeft) {
+                character.setIcon(skeletonStillLeft);
+            } else if (character.getIcon() == skeletonRight) {
+                character.setIcon(skeletonStillRight);
+            }
         }
         if(k == ke.VK_DOWN){
             keyLog[3] = 0;
+            if (character.getIcon() == catLeft) {
+                character.setIcon(catStillLeft);
+            } else if (character.getIcon() == catRight) {
+                character.setIcon(catStillRight);
+            } else if (character.getIcon() == hunterLeft) {
+                character.setIcon(hunterStillLeft);
+            } else if (character.getIcon() == hunterRight) {
+                character.setIcon(hunterStillRight);
+            } else if (character.getIcon() == skeletonLeft) {
+                character.setIcon(skeletonStillLeft);
+            } else if (character.getIcon() == skeletonRight) {
+                character.setIcon(skeletonStillRight);
+            }
         }
     }
     @Override

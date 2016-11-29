@@ -162,8 +162,10 @@ public class Options extends JPanel implements ActionListener, ItemListener{
                 jf.lpane.remove(jf.L2);
                 jf.lpane.remove(jf.OP);
                 jf.lpane.add(jf.G1);
-                jf.G1.grabFocus();                
-                jf.G1.clown_time.start();
+                jf.G1.grabFocus();
+                jf.G1.timeNumber = 0;
+                jf.G1.clown_time.start();      
+                jf.G1.time.start();
                 
         }
     }
