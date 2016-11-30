@@ -397,8 +397,8 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
                     jf.lpane.remove(jf.G1);
                     jf.lpane.add(jf.L2);
                     //jf.lpane.remove(jf.L2);
-                    jf.lpane.add(jf.SB);}
-       
+                    jf.lpane.add(jf.SB, new Integer(1),0);}
+                       
             } 
             
         
