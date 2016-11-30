@@ -1,6 +1,8 @@
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Options extends JPanel implements ActionListener, ItemListener{
     
@@ -165,7 +167,9 @@ public class Options extends JPanel implements ActionListener, ItemListener{
                 jf.G1.grabFocus();
                 jf.G1.timeNumber = 0;
                 jf.G1.clown_time.start();      
+                jf.G1.timeNumber = 0;
                 jf.G1.time.start();
+                
                 
         }
     }
