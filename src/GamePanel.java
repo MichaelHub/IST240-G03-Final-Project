@@ -186,7 +186,6 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
         bottomBar.add(timeDisplay, c);
         timeDisplay.setEnabled(false);
         time = new Timer(1000, this);
-        time.start();
         
         score_count = 0;
         scoreDisplay = new JButton ("Score: "+score_count);
@@ -216,6 +215,9 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
         background.setBounds(bx,by, bw, bh);
         background.add(clown);
         background.add(character);
+       
+            
+        
     }
       
     public void getCharacterLocation() {
@@ -386,7 +388,20 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
         if (obj == time) {
             timeNumber++;
             timeDisplay.setText("Time: " + timeNumber);
-        }
+            
+            
+                //GAME ENDS AT 60 SECONDS AND GOES TO SCOREBOARD
+                if (timeNumber >= 60){
+                    time.stop();
+                    timeNumber = 0;
+                    jf.lpane.remove(jf.G1);
+                    jf.lpane.add(jf.L2);
+                    //jf.lpane.remove(jf.L2);
+                    jf.lpane.add(jf.SB);}
+       
+            } 
+            
+        
         if (obj == clown_time){
             moveClown();
         }
