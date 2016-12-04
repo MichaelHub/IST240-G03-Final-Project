@@ -270,9 +270,9 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
 
             //Move left or right
             switch (period) {
-                case 0: period = 5; break;
-                case 1: period = 10; break;
-                case 2: period = 15; break;
+                case 0: period = 3; break;
+                case 1: period = 5; break;
+                case 2: period = 7; break;
             }
             switch (dir) {
                 case 0: direction[0] = 0; direction[1] = 0; break;
@@ -299,9 +299,9 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
 
             //Move up or down
             switch (period) {
-                case 0: period = 5; break;
-                case 1: period = 10; break;
-                case 2: period = 15; break;
+                case 0: period = 3; break;
+                case 1: period = 5; break;
+                case 2: period = 7; break;
             }
 
             switch (dir) {
