@@ -12,10 +12,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.XMLDecoder;
 import java.beans.XMLEncoder;
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.io.*;
+import java.net.URL;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
@@ -59,10 +57,10 @@ public XML_240()
     
 }
 //==========================================================================
-           public void openReaderXML(String filename)
+           public void openReaderXML(URL filename)
              {
            try {
-              de = new XMLDecoder(new BufferedInputStream(new FileInputStream(filename)));
+              de = new XMLDecoder(new BufferedInputStream(filename.openStream()));
              }
            catch(Exception xx) {xx.printStackTrace();}
              }

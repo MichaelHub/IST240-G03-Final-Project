@@ -20,15 +20,9 @@ public class AboutPanel  extends JPanel implements ActionListener{
         
         this.setLayout( new BorderLayout() );
         
-        String test1 = "These will be where the directions will be written and read from in XML";
-        x2.openWriterXML("about.xml");
-        x2.writeObject(test1);
-        x2.closeWriterXML();
 
-        x2.openReaderXML("about.xml");
-        String s1 = (String)x2.ReadObject();
-        x2.closeReaderXML();
         
+        String s1 = " ";
         about = new JLabel(s1);
 
         this.add(about, BorderLayout.NORTH);

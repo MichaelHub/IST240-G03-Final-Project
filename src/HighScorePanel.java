@@ -1,15 +1,23 @@
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.*;
+import java.net.*;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 
 public class HighScorePanel extends JPanel implements ActionListener{
     JButton back;
     myJFrame jf;
+    XML_240 x2;
     
-    HighScorePanel(myJFrame jf){
+    HighScorePanel(myJFrame jf) {
         this.jf = jf;
         
+        x2 = new XML_240();
         
         this.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
@@ -23,41 +31,73 @@ public class HighScorePanel extends JPanel implements ActionListener{
         
         this.back.addActionListener(this);
         this.add(back,c);
+        int lines = 0;
+        try{
+            URL scores = new URL("http://ec2-35-162-147-239.us-west-2.compute.amazonaws.com/scores.xml");
+            BufferedReader reader = new BufferedReader(new InputStreamReader(scores.openStream()));
+            String inputLine;
+            while ((inputLine = reader.readLine()) != null) lines++;
+            reader.close();
+            //System.out.println(lines);
+        } catch (IOException ex) {
+            Logger.getLogger(HighScorePanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
-        
-        
-        
-        String[] columnNames = {"First Name","Last Name",
-                                        "Score"};     
-                String[][] data = new String[5][3];
+        if (lines != 0){
+            int entryCount = (lines - 3)/4;
+            int dataCount = lines - 3;
+            //System.out.println(entryCount);
+            //System.out.println(dataCount);
+            String[] columnNames = {"First Name","Last Name","Score","Difficulty"};     
+            Object[][] data = new Object[entryCount][4];
+            URL scores = null;
+            try {
+                scores = new URL("http://ec2-35-162-147-239.us-west-2.compute.amazonaws.com/scores.xml");
+            } catch (MalformedURLException ex) {
+                Logger.getLogger(HighScorePanel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            x2.openReaderXML(scores);
+            for (int z = 1, x = 0, y = 0; z <= lines; z++ ) {
+                if (y == 0 || y == 1 || y == 3) {
+                    data[x][y] = (String)x2.ReadObject();
+                    y++;
+                } else if (y == 2) {
+                    data[x][y] = (int)x2.ReadObject();
+                    y++;                    
+                } else if (y == 4) {
+                    x++;
+                    y = 0;
+                }
+            }
+            x2.closeReaderXML();
 
-                data[0][0] = "Kyle";   
-                data[0][1] = "Mullen";
-                data[0][2] = "40";
-                
-                data[1][0] = "Max";   
-                data[1][1] = "D";
-                data[1][2] = "27";
-                
-                data[2][0] = "Mike";   
-                data[2][1] = "Smith";
-                data[2][2] = "10";
-                
-                data[3][0] = "Connor";   
-                data[3][1] = "Ohara";
-                data[3][2] = "2";
-                
-                data[4][0] = "Matt";   
-                data[4][1] = "Tim";
-                data[4][2] = "0";
-                
 
-                JTable table = new JTable(data, columnNames);
-                JScrollPane tableScrollPane = new JScrollPane(table);
-                
-                c.gridx = 1;
-                c.gridy = 1;
-		this.add(tableScrollPane,c);
+            JTable table = new JTable();
+            JScrollPane tableScrollPane = new JScrollPane(table);
+            
+            table.setModel(new DefaultTableModel(data, columnNames) {
+                Class[] types = { String.class, String.class, Integer.class,
+                        String.class };
+                boolean[] canEdit = { false, false, false, false };
+
+                @Override
+                public Class getColumnClass(int columnIndex) {
+                    return this.types[columnIndex];
+                }
+
+                public boolean isCellEditable(int columnIndex) {
+                    return this.canEdit[columnIndex];
+                }
+            });
+            
+            table.getColumnModel().setColumnMargin(15);
+            table.setAutoCreateRowSorter(true);
+
+            c.gridx = 1;
+            c.gridy = 1;
+            this.add(tableScrollPane,c);
+
+        }
         
     }
 

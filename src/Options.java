@@ -120,16 +120,20 @@ public class Options extends JPanel implements ActionListener, ItemListener{
                 jf.G1.chosen_character = String.valueOf(characterSelect.getSelectedItem());
                 
                 if (String.valueOf(difficultySelect.getSelectedItem()) == "Easy"){
-                    jf.G1.clown_time.setDelay(300);
+                    jf.G1.clown_time.setDelay(200);
+                    jf.G1.clown_move_speed = 10;
                 }
                 if (String.valueOf(difficultySelect.getSelectedItem()) == "Medium"){
-                    jf.G1.clown_time.setDelay(200);
+                    jf.G1.clown_time.setDelay(150);
+                    jf.G1.clown_move_speed = 20;
                 }
                 if (String.valueOf(difficultySelect.getSelectedItem()) == "Hard"){
                     jf.G1.clown_time.setDelay(100);
+                    jf.G1.clown_move_speed = 25;
                 }
                 if (String.valueOf(difficultySelect.getSelectedItem()) == "Clown Hell"){
-                    jf.G1.clown_time.setDelay(50);
+                    jf.G1.clown_time.setDelay(75);
+                    jf.G1.clown_move_speed = 25;
                 }
 
                 
