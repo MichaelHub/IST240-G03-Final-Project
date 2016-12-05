@@ -401,12 +401,13 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
             
             
                 //GAME ENDS AT 60 SECONDS AND GOES TO SCOREBOARD
-                if (timeNumber >= 60){
+                if (timeNumber >= 2){
                     direction[0] = 0;
                     direction[1] = 0;
                     direction[2] = 0;
                     direction[3] = 0;
-                    jf.G1.clown_time.stop();
+                    jf.G1.clown_time.stop();     
+                    jf.EN.player_score.setText("Your Score: " + score_count);
                     score_count = 0;
                     scoreDisplay.setText("Score: " + score_count);
                     jf.G1.time.stop();
@@ -415,7 +416,7 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
                     jf.lpane.remove(jf.G1);
                     jf.lpane.add(jf.L2);
                     //jf.lpane.remove(jf.L2);
-                    jf.lpane.add(jf.SB, new Integer(1),0);}
+                    jf.lpane.add(jf.EN, new Integer(1),0);}
                        
             } 
             

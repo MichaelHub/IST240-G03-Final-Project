@@ -25,6 +25,9 @@ public class myJFrame extends JFrame
     //Score Board Panel
     HighScorePanel SB = new HighScorePanel(this);
     
+    //enter name panel
+    enterName EN = new enterName(this);
+    
 	public myJFrame ()
 	{
 		super ("Clown Catcher");
@@ -62,6 +65,11 @@ public class myJFrame extends JFrame
                 SB.setBounds(0,0,700,500);
                 SB.setBackground(Color.GRAY);
                 SB.setOpaque(false);
+                
+                //enter name panel (not visible at start)
+                EN.setBounds(0,0,700,500);
+                EN.setBackground(Color.GRAY);
+                EN.setOpaque(false);
                 
                 
                 //Options Panel (not visible at start)
