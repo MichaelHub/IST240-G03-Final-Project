@@ -41,7 +41,7 @@ public class Landing1 extends JPanel implements ActionListener{
         this.about.addActionListener(this);
         
         scoreboard = new JButton();
-        scoreboard.setText("Score Board");
+        scoreboard.setText("Scoreboard");
         c.gridx = 3;
         c.gridy = 4;
         this.add(scoreboard, c);
@@ -68,20 +68,18 @@ public class Landing1 extends JPanel implements ActionListener{
         else if (obj == this.instructions)
             {
                 jf.lpane.remove(jf.L1);
-                //jf.lpane.remove(jf.L2);
                 jf.lpane.add(jf.I1, new Integer(1),0);
             }
         else if (obj == this.about)
             {
                 jf.lpane.remove(jf.L1);
-                jf.lpane.remove(jf.L2);
-                jf.lpane.add(jf.A1);
+                jf.lpane.add(jf.A1, new Integer(1),0);
             }
         else if (obj == this.scoreboard)
             {
                 jf.lpane.remove(jf.L1);
-                //jf.lpane.remove(jf.L2);
                 jf.lpane.add(jf.SB, new Integer(1),0);
+                jf.SB.loadScores();
             }
         
     }
