@@ -80,8 +80,8 @@ public class Landing1 extends JPanel implements ActionListener{
         else if (obj == this.scoreboard)
             {
                 jf.lpane.remove(jf.L1);
-                //jf.lpane.remove(jf.L2);
                 jf.lpane.add(jf.SB, new Integer(1),0);
+                jf.SB.loadScores();
             }
         
     }

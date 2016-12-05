@@ -140,6 +140,7 @@ public class Options extends JPanel implements ActionListener, ItemListener{
                 jf.G1.chosen_time = String.valueOf(timeSelect.getSelectedItem());
                 
                 jf.G1.option1.setText(jf.G1.chosen_character);
+                jf.G1.option2.setText(String.valueOf(difficultySelect.getSelectedItem()));
                 jf.G1.option3.setText(jf.G1.chosen_time);
                 
                 Icon hunter = new ImageIcon("images/hunter.gif");

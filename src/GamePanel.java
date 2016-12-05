@@ -1,18 +1,32 @@
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.border.*;
+import javax.swing.event.DocumentListener;
 
 public class GamePanel  extends JPanel implements ActionListener, KeyListener{
-    JButton back, menu, timeDisplay, scoreDisplay, menuClose, menuMain, menuOptions;
+    JButton back, menu, timeDisplay, scoreDisplay, menuClose, menuMain, menuOptions, scoreSubmit;
     JButton option1, option2, option3;
+    JTextField lastName, firstName;
+    String text1, text2;
     //Character, enemy, and background displays
     JLabel character, clown, background;
     Icon clown_icon;
     //Panels
     myJFrame jf;
-    JPanel gameMenu;
+    JPanel gameMenu, sendScore;
     //Timer
     Timer time, clown_time;
     int timeNumber;
@@ -92,11 +106,20 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
         gameMenu.setBackground(Color.YELLOW);
         Border loweredetched;
         loweredetched = BorderFactory.createEtchedBorder(EtchedBorder.LOWERED);
-        gameMenu.setBorder(loweredetched);
-        
+        gameMenu.setBorder(loweredetched);        
         gameMenu.setLayout (new GridBagLayout());
+        
+        //Menu within gameScreen
+        sendScore = new JPanel();
+        sendScore.setBounds(200,120,280,320);
+        sendScore.setBackground(Color.YELLOW);
+        sendScore.setBorder(loweredetched);        
+        sendScore.setLayout (new GridBagLayout());
+        
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
+        
+        //Menu items
         
         //Menu title
         JLabel menuTitle = new JLabel("Menu");
@@ -138,6 +161,127 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
         gameMenu.setVisible(false);
         
         //end of gameMenu
+        
+        //start of sendScore menu
+        
+        //sendScore title
+        JLabel sendScoreTitle = new JLabel("Submit Score");
+        menuTitle.setFont(menuTitle.getFont().deriveFont(22.0f));
+        gbc.weightx = 1;
+        gbc.gridy = 0;
+        gbc.insets = new Insets(10,100,0,0);
+        sendScore.add(sendScoreTitle, gbc);
+        
+        JLabel firstLabel = new JLabel("First Name: ");
+        gbc.gridy = 1;
+        gbc.gridx = 0;
+        gbc.ipady = 20;
+        gbc.insets = new Insets(10,0,0,0);
+        sendScore.add(firstLabel, gbc);       
+        
+        //First name text input
+        firstName = new JTextField();
+        firstName.setInputVerifier(new InputVerifier() {
+            @Override
+            public boolean verify(JComponent input) {
+                text1 = ((JTextField) input).getText();
+                if (text1.matches("[a-zA-Z]+") && text1.length() > 0){
+                    return true;                    
+                }
+                return false;
+            }
+        });
+        gbc.gridy = 1;
+        gbc.gridx = 1;
+        gbc.ipady = 20;
+        gbc.insets = new Insets(10,70,0,0);
+        sendScore.add(firstName, gbc);
+        
+        JLabel lastLabel = new JLabel("Last Name: ");
+        gbc.gridy = 2;
+        gbc.ipady = 20;
+        gbc.gridx = 0;
+        gbc.insets = new Insets(0,0,0,0);
+        sendScore.add(lastLabel, gbc);      
+        
+        //Last name text input
+        lastName = new JTextField();
+        lastName.setInputVerifier(new InputVerifier() {
+            @Override
+            public boolean verify(JComponent input) {
+                text2 = ((JTextField) input).getText();
+                if (text2.matches("[a-zA-Z]+") && text2.length() > 0){
+                    return true;                    
+                }
+                return false;
+            }
+        });
+        gbc.gridy = 2;
+        gbc.gridx = 1;
+        gbc.ipady = 20;
+        gbc.gridwidth = 4;
+        gbc.insets = new Insets(10,70,0,0);
+        sendScore.add(lastName, gbc);
+        
+        lastName.addKeyListener(new KeyAdapter() {
+            public void keyReleased(KeyEvent e) {
+                text2 = ((JTextField) lastName).getText();
+                checkInputs();
+            }
+            public void keyTyped(KeyEvent e) {
+                text2 = ((JTextField) lastName).getText();
+                checkInputs();
+            }
+            public void keyPressed(KeyEvent e) {
+                text2 = ((JTextField) lastName).getText();
+                checkInputs();
+            }
+        });
+        
+        firstName.addKeyListener(new KeyAdapter() {
+            public void keyReleased(KeyEvent e) {
+                text1 = ((JTextField) firstName).getText();
+                checkInputs();
+            }
+            public void keyTyped(KeyEvent e) {
+                text1 = ((JTextField) firstName).getText();
+                checkInputs();
+            }
+            public void keyPressed(KeyEvent e) {
+                text1 = ((JTextField) firstName).getText();
+                checkInputs();
+            }
+        });
+        
+        //instructions
+        String notice = "Please enter only letters and no spaces. Profanity will result in your score not being submitted. Text fields that contain unpermitted characters will not allow you to continue.";
+        JTextArea noticeArea = new JTextArea(2, 20);
+        noticeArea.setText(notice);
+        noticeArea.setWrapStyleWord(true);
+        noticeArea.setLineWrap(true);
+        noticeArea.setOpaque(false);
+        noticeArea.setEditable(false);
+        noticeArea.setFocusable(false);
+        gbc.gridy = 3;
+        gbc.gridx = 0;
+        gbc.ipady = 20;
+        gbc.gridwidth = 3;
+        gbc.insets = new Insets(0,0,0,0);
+        sendScore.add(noticeArea, gbc);
+        
+        scoreSubmit = new JButton ("Submit");
+        gbc.gridy = 4;
+        gbc.ipady = 20;
+        gbc.insets = new Insets(10,0,0,0);
+        sendScore.add(scoreSubmit, gbc);
+        scoreSubmit.setEnabled(false);
+        scoreSubmit.addActionListener(this);
+        
+        gameScreen.add(sendScore);
+        sendScore.setVisible(false);
+        
+        //end of sendScore menu
+        
         //set game background
         Icon img = new ImageIcon("images/map1.png");
         background = new JLabel();
@@ -248,6 +392,14 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
         }
     }
     
+    public void checkInputs () {
+        if (text1 != null && text2 != null && (text2.matches("[a-zA-Z]+")) && text2.length() > 0 && (text1.matches("[a-zA-Z]+")) && text1.length() > 0 ){
+            scoreSubmit.setEnabled(true);  
+        } else {
+            scoreSubmit.setEnabled(false);  
+        }
+    }
+    
     public void moveClown() {
         
         // direction[0]  right
@@ -309,7 +461,7 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
                 case 1: direction[2] = period; break;
                 case 2: direction[3] = period; break;
             }
-            getClownLocation(direction[2],direction[3]);
+            //getClownLocation(direction[2],direction[3]);
 
             //If up/down movement can't fit, recalculate
             if (direction[2] != 0 && clowny - (clown_move_speed*direction[2]) <= 40) {
@@ -399,25 +551,61 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
             timeNumber++;
             timeDisplay.setText("Time: " + timeNumber);
             
+            //GAME ENDS AT 60 SECONDS AND GOES TO SCOREBOARD
+            if (timeNumber >= 60){
+                direction[0] = 0;
+                direction[1] = 0;
+                direction[2] = 0;
+                direction[3] = 0;
+                jf.G1.clown_time.stop();
+                gameMenu.setVisible(false);                    
+                sendScore.setVisible(true);
+            }
+        }
+        if (obj == scoreSubmit) {
             
-                //GAME ENDS AT 60 SECONDS AND GOES TO SCOREBOARD
-                if (timeNumber >= 60){
-                    direction[0] = 0;
-                    direction[1] = 0;
-                    direction[2] = 0;
-                    direction[3] = 0;
-                    jf.G1.clown_time.stop();
-                    score_count = 0;
-                    scoreDisplay.setText("Score: " + score_count);
-                    jf.G1.time.stop();
-                    timeNumber = 0;
-                    timeDisplay.setText("Time: " + timeNumber);
-                    jf.lpane.remove(jf.G1);
-                    jf.lpane.add(jf.L2);
-                    //jf.lpane.remove(jf.L2);
-                    jf.lpane.add(jf.SB, new Integer(1),0);}
-                       
-            } 
+            try {
+                scoreSubmit.setText("Submitting score...");
+                String difficulty = null;
+
+                if (option2.getText() == "Easy") {
+                    difficulty = "Easy";
+                } else if (option2.getText() == "Medium") {
+                    difficulty = "Medium";
+                } else if (option2.getText() == "Hard") {
+                    difficulty = "Hard";
+                } else if (option2.getText() == "Clown Hell") {
+                    difficulty = "Clown%20Hell";
+                }
+                System.out.println (text1);
+                System.out.println (text2);
+                System.out.println (score_count);
+                System.out.println (difficulty);
+                URL url = new URL("http://ec2-35-162-147-239.us-west-2.compute.amazonaws.com/submit/" + text1 + "/" + text2 + "/" + score_count + "/" + difficulty);
+
+                URLConnection conn = url.openConnection();
+                // open the stream and put it into BufferedReader
+                conn.getInputStream();
+            } catch (MalformedURLException ex) {
+                Logger.getLogger(GamePanel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(GamePanel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            scoreSubmit.setText("Submit");
+            scoreSubmit.setEnabled(false); 
+            sendScore.setVisible(false);
+            score_count = 0;
+            scoreDisplay.setText("Score: " + score_count);
+            jf.G1.time.stop();
+            timeNumber = 0;
+            timeDisplay.setText("Time: " + timeNumber);
+            jf.lpane.remove(jf.G1);
+            jf.lpane.add(jf.L2);
+            //jf.lpane.remove(jf.L2);
+            jf.lpane.add(jf.SB, new Integer(1),0);
+            jf.SB.loadScores();
+            
+        }
             
         
         if (obj == clown_time){
@@ -425,9 +613,9 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
             boolean state = intersect(character, clown);
             if (state == true) {
                 clownx = (int) (Math.random()*(890)+40);
-                System.out.println(clownx);
-                clowny = (int) (Math.random()*(1350));
-                System.out.println(clowny);
+                //System.out.println(clownx);
+                clowny = (int) (Math.random()*(1000));
+                //System.out.println(clowny);
                 clown.setBounds(clownx,clowny,40,60);
                 direction[0] = 0;
                 direction[1] = 0;
@@ -692,41 +880,6 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
                 character.setBounds(x, y, 60, 60);
             }
         }
-        if (k == ke.VK_O) {
-            moveClown();
-        }
-        if (k == ke.VK_I) {
-            int test = clowny - clown_move_speed;
-            if (test > 40){
-                clowny = clowny - clown_move_speed;
-                System.out.println("Clown moved up to " + clowny);
-                clown.setBounds(clownx, clowny, 40, 60);
-            }
-        }
-        if (k == ke.VK_K) {
-            int test = clowny + clown_move_speed;
-            if (test < 930){
-                clowny = clowny + clown_move_speed;
-                System.out.println("Clown moved down to " + clowny);
-                clown.setBounds(clownx, clowny, 40, 60);                
-            }
-        }
-        if (k == ke.VK_J) {
-            int test = clownx - clown_move_speed;
-            if (test > 0) {
-                clownx = clownx - clown_move_speed;
-                System.out.println("Clown moved left to " + clownx);
-                clown.setBounds(clownx, clowny, 40, 60);                
-            }
-        }
-        if (k == ke.VK_L) {
-            int test = clownx + clown_move_speed;
-            if (test < 1350) {
-                clownx = clownx + clown_move_speed;
-                System.out.println("Clown moved right to " + clownx);
-                clown.setBounds(clownx, clowny, 40, 60);
-            }
-        }
     }
     @Override
     public void keyReleased(KeyEvent ke) {
@@ -783,6 +936,9 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
             } else if (character.getIcon() == skeletonRight) {
                 character.setIcon(skeletonStillRight);
             }
+        }
+        if (k == ke.VK_O) {
+            timeNumber = 59;
         }
     }
     @Override

@@ -13,6 +13,9 @@ public class HighScorePanel extends JPanel implements ActionListener{
     JButton back;
     myJFrame jf;
     XML_240 x2;
+    GridBagConstraints c;
+    JTable table = new JTable();
+    JScrollPane tableScrollPane = new JScrollPane(table);
     
     HighScorePanel(myJFrame jf) {
         this.jf = jf;
@@ -20,7 +23,7 @@ public class HighScorePanel extends JPanel implements ActionListener{
         x2 = new XML_240();
         
         this.setLayout(new GridBagLayout());
-        GridBagConstraints c = new GridBagConstraints();
+        c = new GridBagConstraints();
         
         
         back = new JButton ("Back");
@@ -31,6 +34,19 @@ public class HighScorePanel extends JPanel implements ActionListener{
         
         this.back.addActionListener(this);
         this.add(back,c);
+        
+            
+        table.getColumnModel().setColumnMargin(15);
+        table.setAutoCreateRowSorter(true);
+
+        c.gridx = 1;
+        c.gridy = 1;
+        this.add(tableScrollPane,c);
+        
+        
+    }
+    
+    public void loadScores() {
         int lines = 0;
         try{
             URL scores = new URL("http://ec2-35-162-147-239.us-west-2.compute.amazonaws.com/scores.xml");
@@ -57,14 +73,15 @@ public class HighScorePanel extends JPanel implements ActionListener{
                 Logger.getLogger(HighScorePanel.class.getName()).log(Level.SEVERE, null, ex);
             }
             x2.openReaderXML(scores);
-            for (int z = 1, x = 0, y = 0; z <= lines; z++ ) {
+            for (int z = 1, x = 0, y = 0; z <= lines-3; z++ ) {
                 if (y == 0 || y == 1 || y == 3) {
                     data[x][y] = (String)x2.ReadObject();
                     y++;
                 } else if (y == 2) {
                     data[x][y] = (int)x2.ReadObject();
                     y++;                    
-                } else if (y == 4) {
+                }
+                if (y == 4) {
                     x++;
                     y = 0;
                 }
@@ -72,9 +89,6 @@ public class HighScorePanel extends JPanel implements ActionListener{
             x2.closeReaderXML();
 
 
-            JTable table = new JTable();
-            JScrollPane tableScrollPane = new JScrollPane(table);
-            
             table.setModel(new DefaultTableModel(data, columnNames) {
                 Class[] types = { String.class, String.class, Integer.class,
                         String.class };
@@ -89,18 +103,9 @@ public class HighScorePanel extends JPanel implements ActionListener{
                     return this.canEdit[columnIndex];
                 }
             });
-            
-            table.getColumnModel().setColumnMargin(15);
-            table.setAutoCreateRowSorter(true);
-
-            c.gridx = 1;
-            c.gridy = 1;
-            this.add(tableScrollPane,c);
 
         }
-        
     }
-
     @Override
     public void actionPerformed(ActionEvent event) {
         Object obj = event.getSource();
