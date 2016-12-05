@@ -401,7 +401,7 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
             
             
                 //GAME ENDS AT 60 SECONDS AND GOES TO SCOREBOARD
-                if (timeNumber >= 2){
+                if (timeNumber >= 60){
                     direction[0] = 0;
                     direction[1] = 0;
                     direction[2] = 0;
