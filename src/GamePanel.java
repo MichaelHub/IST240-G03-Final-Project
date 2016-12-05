@@ -360,37 +360,6 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
             
         
     }
-      
-    public void getCharacterLocation() {
-        double cx = character.getLocation().getX();
-        double cy = character.getLocation().getY();
-        double cw = character.getBounds().getWidth();
-        double ch = character.getBounds().getHeight();
-        System.out.println("Character X: " + cx);
-        System.out.println("Character Y: " + cy);
-        System.out.println("Background X: " + bx);
-        System.out.println("Background Y: " + by);
-        System.out.println("Intersect: " + intersect(character, clown));
-        System.out.println("--------------");
-    }
-      
-    public void getClownLocation(int up, int down) {
-        double cx = clown.getLocation().getX();
-        double cy = clown.getLocation().getY();
-        System.out.println("Clown X: " + cx);
-        System.out.println("Clown Y: " + cy);        
-        if (up != 0) {
-            double up1 = clown.getLocation().getY() + (direction[2]*clown_move_speed);
-            double up2 = (direction[2]*clown_move_speed) + by;
-            System.out.println("UP IF1, should be < 36: " + up1);
-            System.out.println("UP IF2, should be > 0: " + up2);
-        } else if (down != 0) {
-            double down1 = clown.getLocation().getY() + (direction[3]*clown_move_speed);
-            double down2 = by - (direction[3]*clown_move_speed);
-            System.out.println("DOWN IF1, should be > 396: " + down1);
-            System.out.println("DOWN IF2, should be < -520: " + down2);
-        }
-    }
     
     public void checkInputs () {
         if (text1 != null && text2 != null && (text2.matches("[a-zA-Z]+")) && text2.length() > 0 && (text1.matches("[a-zA-Z]+")) && text1.length() > 0 ){
@@ -577,10 +546,6 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
                 } else if (option2.getText() == "Clown Hell") {
                     difficulty = "Clown%20Hell";
                 }
-                System.out.println (text1);
-                System.out.println (text2);
-                System.out.println (score_count);
-                System.out.println (difficulty);
                 URL url = new URL("http://ec2-35-162-147-239.us-west-2.compute.amazonaws.com/submit/" + text1 + "/" + text2 + "/" + score_count + "/" + difficulty);
 
                 URLConnection conn = url.openConnection();

@@ -8,7 +8,7 @@ public class Options extends JPanel implements ActionListener, ItemListener{
     
     JComboBox timeSelect, difficultySelect, characterSelect;
     JLabel title, characterImage;
-    JButton characterLabel, timeLabel, difficultyLabel, cont;
+    JButton characterLabel, timeLabel, difficultyLabel, cont, back;
     myJFrame jf;
 
     
@@ -93,11 +93,21 @@ public class Options extends JPanel implements ActionListener, ItemListener{
         cont.setText("Continue");
         c.gridx = 0;
         c.gridy = 6;
-        c.gridwidth = 0;
-        c.insets = new Insets(0,-100,30,0);
+        c.gridwidth = 2;
+        c.insets = new Insets(0,250,30,0);
         cont.setEnabled(true);
         this.add(cont, c);
         this.cont.addActionListener(this);
+        
+        //Back button
+        back = new JButton();
+        back.setText("Back");
+        c.gridx = 1;
+        c.gridy = 6;
+        c.insets = new Insets(0,100,30,0);
+        back.setEnabled(true);
+        this.add(back, c);
+        this.back.addActionListener(this);
         
         //Titie
         title = new JLabel();
@@ -175,7 +185,10 @@ public class Options extends JPanel implements ActionListener, ItemListener{
                 jf.G1.timeNumber = 0;
                 jf.G1.time.start();
                 
-                
+        }
+        if (obj == back) {
+            jf.lpane.remove(jf.OP);
+            jf.lpane.add(jf.L1, new Integer(1), 0);
         }
     }
     public void itemStateChanged(ItemEvent event) {
