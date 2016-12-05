@@ -86,9 +86,6 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
         direction[2] = 0; // up
         direction[3] = 0; // down
         
-        //default clown movement speed
-        clown_move_speed = 10;
-        
         //Menu within gameScreen
         gameMenu = new JPanel();
         gameMenu.setBounds(250,120,200,220);
@@ -266,12 +263,16 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
             // Generates how far clown will travel in the location
             // if 0, 1 spaces. if 1, 2 spaces. if 2, 3 spaces.
             int period = (int) (Math.floor(Math.random() * 3));
+            
+            //Check variable
+            //if zero, everything fits. else, it'll recalculate
+            int fits = 0;
 
             //Move left or right
             switch (period) {
-                case 0: period = 1; break;
-                case 1: period = 2; break;
-                case 2: period = 3; break;
+                case 0: period = 3; break;
+                case 1: period = 5; break;
+                case 2: period = 7; break;
             }
             switch (dir) {
                 case 0: direction[0] = 0; direction[1] = 0; break;
@@ -279,14 +280,18 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
                 case 2: direction[1] = period; break;
             }
             //If left/right movement can't fit, recalculate
-            if (direction[0] != 0 && clown_move_speed - clownx < 1350) {
+            if (direction[0] != 0 && clownx + (clown_move_speed*direction[0]) >= 1350) {
                 //System.out.println(-(direction[0]*clown_move_speed) + " and "+ bx + "is less than -700");
-                moveClown();
-            } else if (clownx + clown_move_speed> 50) {
+                fits = 1;
+            } else if (direction[1] != 0 && clownx - (clown_move_speed*direction[1]) <= 0) {
                 //System.out.println((direction[1]*clown_move_speed) + " and "+ bx + "is greater than 0");
+                fits = 1;
+            }
+            
+            if (fits == 1) {
+                direction[0] = 0;
+                direction[1] = 0;
                 moveClown();
-            } else {
-                //System.out.print("Fits");
             }
 
             dir = (int) (Math.floor(Math.random() * 3));
@@ -295,8 +300,8 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
             //Move up or down
             switch (period) {
                 case 0: period = 3; break;
-                case 1: period = 6; break;
-                case 2: period = 9; break;
+                case 1: period = 5; break;
+                case 2: period = 7; break;
             }
 
             switch (dir) {
@@ -307,30 +312,35 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
             getClownLocation(direction[2],direction[3]);
 
             //If up/down movement can't fit, recalculate
-            if (direction[2] != 0 && (clowny + clown_move_speed) > 50) {
+            if (direction[2] != 0 && clowny - (clown_move_speed*direction[2]) <= 40) {
                 //System.out.println((direction[2]*clown_move_speed) + " and "+ by + "is greater than 0");
-                moveClown();
-            } else if (direction[3] != 0 && (clowny - clown_move_speed) > 600) {
+                fits = 1;
+            } else if (direction[3] != 0 && clowny + (clown_move_speed*direction[3]) >= 930) {
                 //System.out.println((direction[3]*clown_move_speed) + " and "+ by + " is less than -520.");
-                moveClown();
-            } else {
-                //System.out.print("Fits");
+                fits = 1;
             }
+            
+            if (fits == 1) {
+                direction[2] = 0;
+                direction[3] = 0;
+                moveClown();
+            }
+            
         } else {
             if (direction[0] > 0) {
                 clownx = clownx + clown_move_speed;
-                direction[0] = 0;
+                direction[0]--;
             } else if (direction[1] > 0) {
                 clownx = clownx - clown_move_speed;
-                direction[1] = 0;              
+                direction[1]--;              
             }
             
             if (direction[2] > 0) {
                 clowny = clowny - clown_move_speed;
-                direction[2] = 0;
+                direction[2]--;
             } else if (direction[3] > 0) {
                 clowny = clowny + clown_move_speed;
-                direction[3] = 0;             
+                direction[3]--;             
             }
             
             clown.setBounds(clownx, clowny, 40, 60);
@@ -392,8 +402,16 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
             
                 //GAME ENDS AT 60 SECONDS AND GOES TO SCOREBOARD
                 if (timeNumber >= 60){
-                    time.stop();
+                    direction[0] = 0;
+                    direction[1] = 0;
+                    direction[2] = 0;
+                    direction[3] = 0;
+                    jf.G1.clown_time.stop();
+                    score_count = 0;
+                    scoreDisplay.setText("Score: " + score_count);
+                    jf.G1.time.stop();
                     timeNumber = 0;
+                    timeDisplay.setText("Time: " + timeNumber);
                     jf.lpane.remove(jf.G1);
                     jf.lpane.add(jf.L2);
                     //jf.lpane.remove(jf.L2);
@@ -404,18 +422,11 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
         
         if (obj == clown_time){
             moveClown();
-        }
-    }
-    @Override
-    public void keyPressed(KeyEvent ke) {
-        int k = ke.getKeyCode();
-        
-        if (k != 0) {
             boolean state = intersect(character, clown);
             if (state == true) {
-                clownx = (int) (Math.random()*(650)+250);
+                clownx = (int) (Math.random()*(890)+40);
                 System.out.println(clownx);
-                clowny = (int) (Math.random()*(150)+250);
+                clowny = (int) (Math.random()*(1350));
                 System.out.println(clowny);
                 clown.setBounds(clownx,clowny,40,60);
                 direction[0] = 0;
@@ -425,6 +436,13 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
                 score_count++;
                 scoreDisplay.setText("Score: " + score_count);
             }
+        }
+    }
+    @Override
+    public void keyPressed(KeyEvent ke) {
+        int k = ke.getKeyCode();
+        
+        if (k != 0) {
         }
         //Movement right (and top-right and down-right)
         if(k == ke.VK_RIGHT){
@@ -674,23 +692,40 @@ public class GamePanel  extends JPanel implements ActionListener, KeyListener{
                 character.setBounds(x, y, 60, 60);
             }
         }
-        if (k == ke.VK_R) {
+        if (k == ke.VK_O) {
             moveClown();
         }
-        if (k == ke.VK_P) {
-            /*
-            if (p = 1) {
-                
-                p++;
-            } else {
-                p = 1;
-            }*/
-        }
-        if (k == ke.VK_O) {
-            clown_move_speed = 30;
-        }
         if (k == ke.VK_I) {
-            clown_move_speed = 20;
+            int test = clowny - clown_move_speed;
+            if (test > 40){
+                clowny = clowny - clown_move_speed;
+                System.out.println("Clown moved up to " + clowny);
+                clown.setBounds(clownx, clowny, 40, 60);
+            }
+        }
+        if (k == ke.VK_K) {
+            int test = clowny + clown_move_speed;
+            if (test < 930){
+                clowny = clowny + clown_move_speed;
+                System.out.println("Clown moved down to " + clowny);
+                clown.setBounds(clownx, clowny, 40, 60);                
+            }
+        }
+        if (k == ke.VK_J) {
+            int test = clownx - clown_move_speed;
+            if (test > 0) {
+                clownx = clownx - clown_move_speed;
+                System.out.println("Clown moved left to " + clownx);
+                clown.setBounds(clownx, clowny, 40, 60);                
+            }
+        }
+        if (k == ke.VK_L) {
+            int test = clownx + clown_move_speed;
+            if (test < 1350) {
+                clownx = clownx + clown_move_speed;
+                System.out.println("Clown moved right to " + clownx);
+                clown.setBounds(clownx, clowny, 40, 60);
+            }
         }
     }
     @Override
